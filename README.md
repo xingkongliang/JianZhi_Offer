@@ -3,8 +3,7 @@
 
 ## 二维数组中的查找
 
-题目描述:
-
+题目描述：
 在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
 ```
 链接：https://www.nowcoder.com/questionTerminal/abc3fe2ce8e146608e868a70efebf62e?f=discussion
@@ -29,7 +28,7 @@ class Solution:
 ```
 
 ## 从尾到头打印链表
-题目描述
+题目描述：
 输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
 ```python
 链接：https://www.nowcoder.com/questionTerminal/d0267f7f55b3412ba93bd35cfa8e8035?f=discussion
@@ -52,8 +51,7 @@ class Solution:
 
 ## 把数组排成最小的数
 
-题目描述:
-
+题目描述：
 输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
 
 ```python
