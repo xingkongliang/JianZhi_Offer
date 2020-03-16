@@ -289,6 +289,34 @@ if(list1 == null){
 
 class Solution:
     def HasSubtree(self, pRoot1, pRoot2):
+        # write code here
+        result = False
+        if pRoot1 != None and pRoot2 != None:
+            if pRoot1.val == pRoot2.val:
+                result = self.DoesTree1haveTree2(pRoot1, pRoot2)
+            if not result:
+                result = self.HasSubtree(pRoot1.left, pRoot2)
+            if not result:
+                result = self.HasSubtree(pRoot1.right, pRoot2)
+        return result
+    # 用于递归判断树的每个节点是否相同
+    # 需要注意的地方是: 前两个if语句不可以颠倒顺序
+    # 如果颠倒顺序, 会先判断pRoot1是否为None, 其实这个时候pRoot2的结点已经遍历完成确定相等了, 但是返回了False, 判断错误
+    def DoesTree1haveTree2(self, pRoot1, pRoot2):
+        if pRoot2 == None:
+            return True
+        if pRoot1 == None:
+            return False
+        if pRoot1.val != pRoot2.val:
+            return False
+        return self.DoesTree1haveTree2(pRoot1.left, pRoot2.left) and self.DoesTree1haveTree2(pRoot1.right, pRoot2.right)
+```
+```python
+链接：https://www.nowcoder.com/questionTerminal/6e196c44c7004d15b1610b9afca8bd88?f=discussion
+来源：牛客网
+
+class Solution:
+    def HasSubtree(self, pRoot1, pRoot2):
          
         def convert(p):
             if p:
