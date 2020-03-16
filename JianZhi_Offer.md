@@ -1,9 +1,18 @@
 # 剑指Offer
 
 * **剑指Offer题解**
-   * 面试题：[二维数组中的查找](#数组中重复的数字)
-   * 面试题：[从尾到头打印链表](#从尾到头打印链表)
-   * 面试题：[重建二叉树](#重建二叉树)
+   * 面试题3：[二维数组中的查找](#数组中重复的数字)
+   * 面试题4：[替换空格](#替换空格)
+   * 面试题5：[从尾到头打印链表](#从尾到头打印链表)
+   * 面试题6：[重建二叉树](#重建二叉树)
+   * 面试题7：[用两个栈实现队列](#用两个栈实现队列)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+
+
    * 面试题：[反转链表](#反转链表)
    * 面试题：[把数组排成最小的数](#把数组排成最小的数)
    * 面试题：[二叉搜索树的后续遍历序列](#二叉搜索树的后续遍历序列)
@@ -13,12 +22,130 @@
    * 面试题：[从上往下打印二叉树](#从上往下打印二叉树)
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
    * 面试题：[复杂链表的复制](#复杂链表的复制)
-   * 面试题：[两个链表的第一个公共结点](#两个链表的第一个公共结点)
+   * 面试题37：[两个链表的第一个公共结点](#两个链表的第一个公共结点)
+   * 面试题38：[数字在排序数组中出现的次数](#数字在排序数组中出现的次数)
+   * 面试题39：[二叉树的深度](#二叉树的深度)
+   * 面试题39-2：[平衡二叉树](#平衡二叉树)
+   * 面试题40：[数组中只出现一次的数字](#数组中只出现一次的数字)
    * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+
+
+## 二维数组中的查找
+
+题目描述：
+在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+```python
+链接：https://www.nowcoder.com/questionTerminal/abc3fe2ce8e146608e868a70efebf62e?f=discussion
+来源：牛客网
+
+class Solution:
+    # array 二维列表
+    def Find(self, target, array):
+        # write code here
+        rows = len(array) - 1
+        cols= len(array[0]) - 1
+        i = rows
+        j = 0
+        while j<=cols and i>=0:
+            if target<array[i][j]:
+                i -= 1
+            elif target>array[i][j]:
+                j += 1
+            else:
+                return True
+        return False
+```
+
+## 替换空格
+题目描述：
+请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+```python
+class Solution:
+    def replaceSpace(self, s):
+        ans = []
+        for i in s:
+            if i == ' ':
+                ans.append('%20')
+            else:
+                ans.append(i)
+        return "".join(ans)
+```
+
+
+## 从尾到头打印链表
+题目描述：
+输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
+```python
+链接：https://www.nowcoder.com/questionTerminal/d0267f7f55b3412ba93bd35cfa8e8035?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回从尾部到头部的列表值序列，例如[1,2,3]
+    def printListFromTailToHead(self, listNode):
+        # write code here
+        lst,lst_bak = [],[]
+        if not listNode:
+            return lst
+        while listNode:
+            lst.append(listNode.val)
+            listNode = listNode.next
+        while lst:
+            lst_bak.append(lst.pop())
+        return lst_bak
+```
+
+
+## 重建二叉树
+
+题目描述：
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+```python
+链接：https://www.nowcoder.com/questionTerminal/8a19cbe657394eeaac2f6ea9b0f6fcf6?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回构造的TreeNode根节点
+    def reConstructBinaryTree(self, pre, tin):
+        # write code here
+        if len(pre) == 0:
+            return None
+        elif len(pre) == 1:
+            return TreeNode(pre[0])
+        else:
+            ans = TreeNode(pre[0])
+            ans.left = self.reConstructBinaryTree(pre[1:tin.index(pre[0])+1], tin[:tin.index(pre[0])])
+            ans.right = self.reConstructBinaryTree(pre[tin.index(pre[0])+1:], tin[tin.index(pre[0])+1:])
+            return ans
+```
+
+## 用两个栈实现队列
+
+题目描述：
+用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
+```python
+链接：https://www.nowcoder.com/questionTerminal/54275ddae22f475981afa2244dd448c6?f=discussion
+来源：牛客网
+
+class Solution:
+    def __init__(self):
+        self.stackA = []
+        self.stackB = []
+
+    def push(self, node):
+        # write code here
+        self.stackA.append(node)
+
+    def pop(self):
+        # return xx
+        if self.stackB:
+            return self.stackB.pop()
+        elif not self.stackA:
+            return None
+        else:
+            while self.stackA:
+                self.stackB.append(self.stackA.pop())
+            return self.stackB.pop()
+```
 
 ## 两个链表的第一个公共结点
 题目描述
@@ -85,76 +212,7 @@ class Solution:
 
         return copyHead
 ```
-## 二维数组中的查找
 
-题目描述：
-在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
-```
-链接：https://www.nowcoder.com/questionTerminal/abc3fe2ce8e146608e868a70efebf62e?f=discussion
-来源：牛客网
-
-class Solution:
-    # array 二维列表
-    def Find(self, target, array):
-        # write code here
-        rows = len(array) - 1
-        cols= len(array[0]) - 1
-        i = rows
-        j = 0
-        while j<=cols and i>=0:
-            if target<array[i][j]:
-                i -= 1
-            elif target>array[i][j]:
-                j += 1
-            else:
-                return True
-        return False
-```
-
-## 从尾到头打印链表
-题目描述：
-输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
-```python
-链接：https://www.nowcoder.com/questionTerminal/d0267f7f55b3412ba93bd35cfa8e8035?f=discussion
-来源：牛客网
-
-class Solution:
-    # 返回从尾部到头部的列表值序列，例如[1,2,3]
-    def printListFromTailToHead(self, listNode):
-        # write code here
-        lst,lst_bak = [],[]
-        if not listNode:
-            return lst
-        while listNode:
-            lst.append(listNode.val)
-            listNode = listNode.next
-        while lst:
-            lst_bak.append(lst.pop())
-        return lst_bak
-```
-
-## 重建二叉树
-
-题目描述：
-输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
-```python
-链接：https://www.nowcoder.com/questionTerminal/8a19cbe657394eeaac2f6ea9b0f6fcf6?f=discussion
-来源：牛客网
-
-class Solution:
-    # 返回构造的TreeNode根节点
-    def reConstructBinaryTree(self, pre, tin):
-        # write code here
-        if len(pre) == 0:
-            return None
-        elif len(pre) == 1:
-            return TreeNode(pre[0])
-        else:
-            ans = TreeNode(pre[0])
-            ans.left = self.reConstructBinaryTree(pre[1:tin.index(pre[0])+1], tin[:tin.index(pre[0])])
-            ans.right = self.reConstructBinaryTree(pre[tin.index(pre[0])+1:], tin[tin.index(pre[0])+1:])
-            return ans
-```
 
 ## 反转链表
 题目描述：
@@ -421,6 +479,152 @@ class Solution:
                 pre = p
                 p = p.next
         return new_head.next
+```
+
+## 数字在排序数组中出现的次数
+
+题目描述：
+统计一个数字在排序数组中出现的次数。
+
+```python
+class Solution:
+    def GetFirstK(self, data, k):
+        low = 0
+        high = len(data) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            if data[mid] < k:
+                low = mid + 1
+            elif data[mid] > k:
+                high = mid - 1
+            else:
+                if mid == low or data[mid - 1] != k: #当到list[0]或不为k的时候跳出函数
+                    return mid
+                else:
+                    high = mid - 1
+        return -1
+
+    def GetLastK(self, data, k):
+        low = 0
+        high = len(data) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            if data[mid] > k:
+                high = mid - 1
+            elif data[mid] < k:
+                low = mid + 1
+            else:
+                if mid == high or data[mid + 1] != k:
+                    return mid
+                else:
+                    low = mid + 1
+        return -1
+
+    def GetNumberOfK(self, data, k):
+        if not data:
+            return 0
+        if self.GetLastK(data, k) == -1 and self.GetFirstK(data, k) == -1:
+            return 0
+        return self.GetLastK(data, k) - self.GetFirstK(data, k) + 1
+```
+
+## 二叉树的深度
+
+题目描述：
+输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+
+```python
+class Solution:
+    def TreeDepth(self, pRoot):
+        if pRoot == None:
+            return 0
+        nLeft = self.TreeDepth(pRoot.left)
+        nRight = self.TreeDepth(pRoot.right)
+        return (nLeft + 1) if nLeft > nRight else (nRight + 1)
+```
+
+## 平衡二叉树
+
+题目描述：
+输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+
+```python
+class Solution:
+    def TreeDepth(self, pRoot):
+        if pRoot == None:
+            return 0
+        nLeft = self.TreeDepth(pRoot.left)
+        nRight = self.TreeDepth(pRoot.right)
+
+        return (nLeft + 1) if nLeft > nRight else (nRight + 1)
+
+    def IsBalanced_Solution(self, pRoot):
+        if pRoot == None:
+            return True
+        nLeft = self.TreeDepth(pRoot.left)
+        nRight = self.TreeDepth(pRoot.right)
+        diff = nLeft - nRight
+        if abs(diff) > 1:
+            return False
+        return self.IsBalanced_Solution(pRoot.left) and self.IsBalanced_Solution(pRoot.right)
+```
+
+## 数组中只出现一次的数字
+
+题目描述：
+一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。
+```python
+链接：https://www.nowcoder.com/questionTerminal/e02fdb54d7524710a7d664d082bb7811?f=discussion
+来源：牛客网
+
+
+# hashMap法
+class Solution:
+    # 返回[a,b] 其中ab是出现一次的两个数字
+    def FindNumsAppearOnce(self, array):
+        hashMap = {}
+        for i in array:
+            if str(i) in hashMap:
+                hashMap[str(i)] += 1
+            else:
+                hashMap[str(i)] = 1
+        res = []
+        for k in hashMap.keys():
+            if hashMap[k] == 1:
+                res.append(int(k))
+        return res
+
+# 异或法
+class Solution:
+    def FindNumsAppearOnce(self, array):
+        if not array:
+            return []
+        # 对array中的数字进行异或运算
+        tmp = 0
+        for i in array:
+            tmp ^= i
+        # 获取tmp中最低位1的位置
+        idx = 0
+        while (tmp & 1) == 0:
+            tmp >>= 1
+            idx += 1
+        a = b = 0
+        for i in array:
+            if self.isBit(i, idx):
+                a ^= i
+            else:
+                b ^= i
+        return [a, b]
+
+    def isBit(self, num, idx):
+        """
+        判断num的二进制从低到高idx位是不是1
+        :param num: 数字
+        :param idx: 二进制从低到高位置
+        :return: num的idx位是否为1
+        """
+        num = num >> idx
+        return num & 1
 ```
 ## 把数组排成最小的数
 
