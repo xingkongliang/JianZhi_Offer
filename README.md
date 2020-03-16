@@ -28,6 +28,27 @@ class Solution:
         return False
 ```
 
+## 从尾到头打印链表
+题目描述
+输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
+```python
+链接：https://www.nowcoder.com/questionTerminal/d0267f7f55b3412ba93bd35cfa8e8035?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回从尾部到头部的列表值序列，例如[1,2,3]
+    def printListFromTailToHead(self, listNode):
+        # write code here
+        lst,lst_bak = [],[]
+        if not listNode:
+            return lst
+        while listNode:
+            lst.append(listNode.val)
+            listNode = listNode.next
+        while lst:
+            lst_bak.append(lst.pop())
+        return lst_bak
+```
 
 ## 把数组排成最小的数
 
