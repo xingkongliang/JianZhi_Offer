@@ -1,5 +1,8 @@
 # 剑指Offer
 
+* **剑指Offer题解**
+   * 面试题：[二维数组中的查找](##数组中重复的数字)
+   * 面试题：[从尾到头打印链表](##从尾到头打印链表)
 
 ## 二维数组中的查找
 
@@ -70,6 +73,29 @@ class Solution:
             ans.left = self.reConstructBinaryTree(pre[1:tin.index(pre[0])+1], tin[:tin.index(pre[0])])
             ans.right = self.reConstructBinaryTree(pre[tin.index(pre[0])+1:], tin[tin.index(pre[0])+1:])
             return ans
+```
+
+## 反转链表
+题目描述：
+输入一个链表，反转链表后，输出新链表的表头。
+```python
+链接：https://www.nowcoder.com/questionTerminal/75e878df47f24fdc9dc3e400ec6058ca?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回ListNode
+    def ReverseList(self, pHead):
+        # write code here
+        if pHead==None or pHead.next==None:
+            return pHead
+        pre = None
+        cur = pHead
+        while cur!=None:
+            tmp = cur.next
+            cur.next = pre
+            pre = cur
+            cur = tmp
+        return pre
 ```
 
 ## 把数组排成最小的数
