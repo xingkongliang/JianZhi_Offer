@@ -11,9 +11,80 @@
    * 面试题：[数的子结构](#数的子结构)
    * 面试题：[二叉树的镜像](#二叉树的镜像)
    * 面试题：[从上往下打印二叉树](#从上往下打印二叉树)
-   * 面试题：[反转链表](#反转链表)
+   * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
+   * 面试题：[复杂链表的复制](#复杂链表的复制)
+   * 面试题：[两个链表的第一个公共结点](#两个链表的第一个公共结点)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
 
+## 两个链表的第一个公共结点
+题目描述
+输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
+```python
+链接：https://www.nowcoder.com/questionTerminal/6ab1d9a29e88450685099d45c9e31e46?f=discussion
+来源：牛客网
 
+class Solution:
+    def FindFirstCommonNode(self, pHead1, pHead2):
+        p1,p2=pHead1,pHead2
+        while p1!=p2:
+            p1 = p1.next if p1 else pHead2
+            p2 = p2.next if p2 else pHead1
+        return p1
+```
+
+## 复杂链表的复制
+题目描述
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/f836b2c43afc4b35ad6adc41ec941dba?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回 RandomListNode
+    def Clone(self, pHead):
+        if not pHead:
+            return None
+         
+        dummy = pHead
+         
+        # first step, N' to N next
+        while dummy:
+            dummynext = dummy.next
+            copynode = RandomListNode(dummy.label)
+            copynode.next = dummynext
+            dummy.next = copynode
+            dummy = dummynext
+         
+        dummy = pHead
+         
+        # second step, random' to random'
+        while dummy:
+            dummyrandom = dummy.random
+            copynode = dummy.next
+            if dummyrandom:
+                copynode.random = dummyrandom.next
+            dummy = copynode.next
+         
+        # third step, split linked list
+        dummy = pHead
+        copyHead = pHead.next
+        while dummy:
+            copyNode = dummy.next
+            dummynext = copyNode.next
+            dummy.next = dummynext
+            if dummynext:
+                copyNode.next = dummynext.next
+            else:
+                copyNode.next = None
+            dummy = dummynext
+ 
+        return copyHead
+```
 ## 二维数组中的查找
 
 题目描述：
@@ -290,6 +361,38 @@ class Solution:
                 queue.append(node.right)
          
         return result
+```
+
+## 删除链表中重复的结点
+
+题目描述
+在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/fc533c45b73a41b0b44ccba763f866ef?f=discussion
+来源：牛客网
+
+class Solution:
+    def deleteDuplication(self, pHead):
+        # write code here
+        if pHead == None or pHead.next == None:
+            return pHead
+        new_head = ListNode(-1)
+        new_head.next = pHead
+        pre = new_head
+        p = pHead
+        nex = None
+        while p != None and p.next != None:
+            nex = p.next
+            if p.val == nex.val:
+                while nex != None and nex.val == p.val:
+                    nex = nex.next
+                pre.next = nex
+                p = nex
+            else:
+                pre = p
+                p = p.next
+        return new_head.next
 ```
 ## 把数组排成最小的数
 
