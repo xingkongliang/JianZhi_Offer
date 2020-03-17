@@ -6,12 +6,21 @@
    * 面试题5：[从尾到头打印链表](#从尾到头打印链表)
    * 面试题6：[重建二叉树](#重建二叉树)
    * 面试题7：[用两个栈实现队列](#用两个栈实现队列)
+   * 面试题8：[旋转数组中最小数字](#旋转数组中最小数字)
+   * 面试题9：[斐波那契数列](#斐波那契数列)
+   * 面试题9-2：[跳台阶](#跳台阶)
+   * 面试题9-3：[变态跳台阶](#变态跳台阶)
+   * 面试题9-4：[矩形覆盖](#矩形覆盖)
+   * 面试题10：[二进制中1的个数](#二进制中1的个数)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
-
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
 
    * 面试题：[反转链表](#反转链表)
    * 面试题：[把数组排成最小的数](#把数组排成最小的数)
@@ -147,6 +156,119 @@ class Solution:
             return self.stackB.pop()
 ```
 
+## 旋转数组中最小数字
+
+题目描述：
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
+输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。
+例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。
+NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+
+```python
+class Solution:
+    def minNumberInRotateArray(self, rotateArray):
+        if len(rotateArray) == 1:
+            return rotateArray[0]
+        right = len(rotateArray) - 1
+        left = 0
+
+        while left < right:
+            if right - left == 1:
+                mid = right
+                break
+            mid = (left + right) // 2
+            if rotateArray[mid] >= rotateArray[left]:
+                left = mid
+            elif rotateArray[mid] <= rotateArray[right]:
+                right = mid
+        return rotateArray[mid]
+```
+
+## 斐波那契数列
+
+题目描述：
+大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项（从0开始，第0项为0）。
+n<=39
+
+```python
+class Solution:
+    def Fibonacci(self, n):
+        # write code here
+        result = [0, 1]
+        if n in result:
+            return result[n]
+        fibNMinusOne = 1
+        fibNMinusTwo = 0
+        for i in range(2, n+1):
+            fibN = fibNMinusOne + fibNMinusTwo
+
+            fibNMinusTwo = fibNMinusOne
+            fibNMinusOne = fibN
+        return fibN
+```
+
+## 跳台阶
+
+题目描述：
+一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法（先后次序不同算不同的结果）。
+
+```python
+class Solution:
+    def jumpFloor(self, number):
+        res = [1, 2]
+        if number in res:
+            return number
+
+        fibNMinusTwo = 1
+        fibNMinusOne = 2
+        for i in range(2, number):
+            fibN = fibNMinusTwo + fibNMinusOne
+            fibNMinusTwo = fibNMinusOne
+            fibNMinusOne = fibN
+        return fibN
+```
+
+## 变态跳台阶
+
+题目描述
+一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。
+
+```python
+class Solution:
+    def jumpFloorII(self, number):
+        return 2**(number-1)
+```
+
+## 矩形覆盖
+题目描述：
+我们可以用2*1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2*1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？
+
+比如n=3时，2*3的矩形块有3种覆盖方法：
+
+```python
+class Solution:
+    def rectCover(self, number):
+        res = [0, 1, 2]
+        if number in res:
+            return number
+
+        fibNMinusTwo = 1
+        fibNMinusOne = 2
+        for i in range(2, number):
+            fibN = fibNMinusTwo + fibNMinusOne
+            fibNMinusTwo = fibNMinusOne
+            fibNMinusOne = fibN
+        return fibN
+```
+
+## 二进制中1的个数
+题目描述：
+输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
+
+```python
+
+```
+
 ## 两个链表的第一个公共结点
 题目描述
 输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
@@ -269,6 +391,7 @@ class Solution:
 
         return self.helper(sequence[:i]) and self.helper(sequence[i:-1])
 ```
+
 ## 合并两个排序的链表
 题目描述
 输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
