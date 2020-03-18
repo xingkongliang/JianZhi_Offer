@@ -22,7 +22,12 @@
    * 面试题18：[数的子结构](#数的子结构)
    * 面试题19：[二叉树的镜像](#二叉树的镜像)
    * 面试题20：[顺时针打印矩阵](#顺时针打印矩阵)
-
+   * 面试题21：[包含min函数的栈](#包含min函数的栈)
+   * 面试题22：[栈的压入、弹出序列](#22. 栈的压入、弹出序列)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
 
@@ -554,6 +559,90 @@ class Solution:
 ## 顺时针打印矩阵
 题目描述：
 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+
+```python
+class Solution:
+    # matrix类型为二维列表，需要返回列表
+    def printMatrix(self, matrix):
+        # write code here
+        if not matrix:
+            return []
+        columns = len(matrix[0])
+        rows = len(matrix)
+
+        def printMatrixCircle(start):
+            endRow = rows - 1 - start
+            endColumn = columns - 1 - start
+
+            # 从左到右打印一行
+            for y in range(start, endColumn + 1):
+                result.append(matrix[start][y])
+
+            # 从上到下打印一列
+            if endRow > start:
+                for x in range(start + 1, endRow + 1):
+                    result.append(matrix[x][endColumn])
+
+            # 从右到左打印一行
+            if endColumn > start and endRow > start:
+                for y in range(endColumn - 1, start - 1, -1):
+                    result.append(matrix[endRow][y])
+
+            # 从下到上打印
+            if endRow > start + 1 and endColumn > start:
+                for x in range(endRow - 1, start, -1):
+                    result.append(matrix[x][start])
+
+        start = 0
+        result = []
+        while columns > start * 2 and rows > start * 2:
+            printMatrixCircle(start)
+            start += 1
+
+        return result
+```
+
+## 包含min函数的栈
+题目描述：
+定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
+注意：保证测试中不会当栈为空的时候，对栈调用pop()或者min()或者top()方法。
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/4c776177d2c04c2494f2555c9fcc1e49?f=discussion
+来源：牛客网
+
+class Solution:
+    def __init__(self):
+        self.stack = []
+        self.assist = []
+
+    def push(self, node):
+        min = self.min()
+        if not min or node < min:
+            self.assist.append(node)
+        else:
+            self.assist.append(min)
+        self.stack.append(node)
+
+    def pop(self):
+        if self.stack:
+            self.assist.pop()
+            return self.stack.pop()
+
+    def top(self):
+        # write code here
+        if self.stack:
+            return self.stack[-1]
+
+    def min(self):
+        # write code here
+        if self.assist:
+            return self.assist[-1]
+```
+
+## 22. 栈的压入、弹出序列
+题目描述：
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
 
 ```python
 
