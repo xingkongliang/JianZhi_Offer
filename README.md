@@ -11,7 +11,7 @@
 
 ## 个人整理
 
-- [剑指offer题解](./sorts.md)
+- [排序](./sorts.md)
 
 - [剑指offer题解](./JianZhi_Offer.md)
 
