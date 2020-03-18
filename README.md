@@ -11,6 +11,8 @@
 
 ## 个人整理
 
+- [剑指offer题解](./sorts.md)
+
 - [剑指offer题解](./JianZhi_Offer.md)
 
 - [LeetCode题解](./LeetCodeLeetCode.md)

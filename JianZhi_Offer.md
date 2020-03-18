@@ -12,22 +12,23 @@
    * 面试题9-3：[变态跳台阶](#变态跳台阶)
    * 面试题9-4：[矩形覆盖](#矩形覆盖)
    * 面试题10：[二进制中1的个数](#二进制中1的个数)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题11：[数值的整数次方](#数值的整数次方)
+   * 面试题12：[打印1到最大的n位数](#打印1到最大的n位数)
+   * 面试题13：[在O_1时间删除链表结点](#在O_1时间删除链表结点)
+   * 面试题14：[调整数组顺序使奇数位于偶数前面](#调整数组顺序使奇数位于偶数前面)
+   * 面试题15：[链表中倒数第k个结点](#链表中倒数第k个结点)
+   * 面试题16：[反转链表](#反转链表)
+   * 面试题17：[合并两个排序的链表](#合并两个排序的链表)
+   * 面试题18：[数的子结构](#数的子结构)
+   * 面试题19：[二叉树的镜像](#二叉树的镜像)
+   * 面试题20：[顺时针打印矩阵](#顺时针打印矩阵)
+
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
 
-   * 面试题：[反转链表](#反转链表)
+
    * 面试题：[把数组排成最小的数](#把数组排成最小的数)
    * 面试题：[二叉搜索树的后续遍历序列](#二叉搜索树的后续遍历序列)
-   * 面试题：[合并两个排序的链表](#合并两个排序的链表)
-   * 面试题：[数的子结构](#数的子结构)
-   * 面试题：[二叉树的镜像](#二叉树的镜像)
    * 面试题：[从上往下打印二叉树](#从上往下打印二叉树)
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
    * 面试题：[复杂链表的复制](#复杂链表的复制)
@@ -266,75 +267,118 @@ class Solution:
 输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
 
 ```python
+class Solution:
+    def NumberOf1(self, n):
+        count = 0
+        if n < 0:
+            n = n & 0xffffffff
+        while n:
+            count += 1
+            n = (n - 1) & n
+        return count
+```
+
+## 数值的整数次方
+题目描述：
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+
+保证base和exponent不同时为0
+
+```python
+class Solution:
+    def Power(self, base, exponent):
+        abs_exponent = abs(exponent)
+        ans = base
+        for i in range(abs_exponent-1):
+            ans *= base
+        if exponent < 0:
+            return 1/ans
+        elif exponent == 0 and base != 0:
+            return 1
+        elif exponent == 0 and base == 0:
+            return 0
+        else:
+            return ans
+```
+
+## 打印1到最大的n位数
+题目描述：
+输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。
+
+```python
 
 ```
 
-## 两个链表的第一个公共结点
-题目描述
-输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
-```python
-链接：https://www.nowcoder.com/questionTerminal/6ab1d9a29e88450685099d45c9e31e46?f=discussion
-来源：牛客网
+## 在O_1时间删除链表结点
+题目描述：
+给定单向链表的头指针和一个结点指针，定义一个函数在O(1)时间删除该结点。
 
-class Solution:
-    def FindFirstCommonNode(self, pHead1, pHead2):
-        p1,p2=pHead1,pHead2
-        while p1!=p2:
-            p1 = p1.next if p1 else pHead2
-            p2 = p2.next if p2 else pHead1
-        return p1
+```python
+
 ```
 
-## 复杂链表的复制
-题目描述
-输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+## 链表中倒数第k个结点
+
+题目描述：
+输入一个链表，输出该链表中倒数第k个结点。
 
 ```python
-链接：https://www.nowcoder.com/questionTerminal/f836b2c43afc4b35ad6adc41ec941dba?f=discussion
-来源：牛客网
-
 class Solution:
-    # 返回 RandomListNode
-    def Clone(self, pHead):
-        if not pHead:
+    def FindKthToTail(self, head, k):
+        if head == None or k <= 0:
             return None
-
-        dummy = pHead
-
-        # first step, N' to N next
-        while dummy:
-            dummynext = dummy.next
-            copynode = RandomListNode(dummy.label)
-            copynode.next = dummynext
-            dummy.next = copynode
-            dummy = dummynext
-
-        dummy = pHead
-
-        # second step, random' to random'
-        while dummy:
-            dummyrandom = dummy.random
-            copynode = dummy.next
-            if dummyrandom:
-                copynode.random = dummyrandom.next
-            dummy = copynode.next
-
-        # third step, split linked list
-        dummy = pHead
-        copyHead = pHead.next
-        while dummy:
-            copyNode = dummy.next
-            dummynext = copyNode.next
-            dummy.next = dummynext
-            if dummynext:
-                copyNode.next = dummynext.next
+        p1 = head
+        p2 = head
+        for i in range(k):
+            if p1:
+                p1 = p1.next
             else:
-                copyNode.next = None
-            dummy = dummynext
-
-        return copyHead
+                return None
+        while p1:
+            p1 = p1.next
+            p2 = p2.next
+        return p2
 ```
 
+## 调整数组顺序使奇数位于偶数前面
+
+题目描述
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+
+```python
+class Solution:
+    def reOrderArray(self, array):
+        m = len(array)
+        k = 0  # 记录已经摆好位置的奇数的个数
+        for i in range(m):
+            if array[i] % 2 == 1:
+                j = i
+                while j > k:
+                    tmp = array[j]
+                    array[j] = array[j-1]
+                    array[j-1] = tmp
+                    j -= 1
+                k += 1
+        return array
+```
+
+如果题目中不要求保持相对位置不变，则可使用如下代码：
+```python
+class Solution:
+    def reOrderArray(self, array):
+        pBegin = 0
+        pEnd = len(array) - 1
+        while pBegin < pEnd:
+            while pBegin < pEnd and array[pBegin] % 2 != 0:
+                pBegin += 1
+            while pBegin < pEnd and array[pEnd] % 2 != 1:
+                pEnd -= 1
+            if pBegin < pEnd:
+                temp = array[pBegin]
+                array[pBegin] = array[pEnd]
+                array[pEnd] = temp
+        return array
+```
 
 ## 反转链表
 题目描述：
@@ -357,39 +401,6 @@ class Solution:
             pre = cur
             cur = tmp
         return pre
-```
-
-## 二叉搜索树的后续遍历序列
-
-题目描述
-输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
-```python
-链接：https://www.nowcoder.com/questionTerminal/a861533d45854474ac791d90e447bafd?f=discussion
-来源：牛客网
-
-class Solution:
-    def VerifySquenceOfBST(self, sequence):
-        # write code here
-        if not sequence:
-            return False
-
-        return self.helper(sequence)
-
-    # 增加helper函数是因为对于递归来说sequence为空可以作为终止条件，而对于判断BST而言 sequence为空是False
-    def helper(self, sequence):
-        if not sequence:
-            return True
-
-        root = sequence[-1]
-        for i in range(len(sequence)):
-            if sequence[i] > root:
-                break
-
-        for right in sequence[i:-1]:
-            if right < root:
-                return False
-
-        return self.helper(sequence[:i]) and self.helper(sequence[i:-1])
 ```
 
 ## 合并两个排序的链表
@@ -509,7 +520,7 @@ class Solution:
 
 ## 二叉树的镜像
 
-题目描述
+题目描述：
 操作给定的二叉树，将其变换为源二叉树的镜像。
 输入描述:
 二叉树的镜像定义：源二叉树
@@ -526,21 +537,125 @@ class Solution:
     	11 9 7  5
 
 ```python
-链接：https://www.nowcoder.com/questionTerminal/564f4c26aa584921bc75623e48ca3011?f=discussion
+class Solution:
+    def Mirror(self, root):
+        if not root:
+            return None
+        if root.left:
+            root.left = self.Mirror(root.left)
+        if root.right:
+            root.right = self.Mirror(root.right)
+        temp = root.left
+        root.left = root.right
+        root.right = temp
+        return root
+```
+
+## 顺时针打印矩阵
+题目描述：
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+
+```python
+
+```
+
+## 两个链表的第一个公共结点
+题目描述
+输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
+```python
+链接：https://www.nowcoder.com/questionTerminal/6ab1d9a29e88450685099d45c9e31e46?f=discussion
 来源：牛客网
 
 class Solution:
+    def FindFirstCommonNode(self, pHead1, pHead2):
+        p1,p2=pHead1,pHead2
+        while p1!=p2:
+            p1 = p1.next if p1 else pHead2
+            p2 = p2.next if p2 else pHead1
+        return p1
+```
 
-    def Mirror(self, root):
+## 复杂链表的复制
+题目描述
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/f836b2c43afc4b35ad6adc41ec941dba?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回 RandomListNode
+    def Clone(self, pHead):
+        if not pHead:
+            return None
+
+        dummy = pHead
+
+        # first step, N' to N next
+        while dummy:
+            dummynext = dummy.next
+            copynode = RandomListNode(dummy.label)
+            copynode.next = dummynext
+            dummy.next = copynode
+            dummy = dummynext
+
+        dummy = pHead
+
+        # second step, random' to random'
+        while dummy:
+            dummyrandom = dummy.random
+            copynode = dummy.next
+            if dummyrandom:
+                copynode.random = dummyrandom.next
+            dummy = copynode.next
+
+        # third step, split linked list
+        dummy = pHead
+        copyHead = pHead.next
+        while dummy:
+            copyNode = dummy.next
+            dummynext = copyNode.next
+            dummy.next = dummynext
+            if dummynext:
+                copyNode.next = dummynext.next
+            else:
+                copyNode.next = None
+            dummy = dummynext
+
+        return copyHead
+```
+
+## 二叉搜索树的后续遍历序列
+
+题目描述
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+```python
+链接：https://www.nowcoder.com/questionTerminal/a861533d45854474ac791d90e447bafd?f=discussion
+来源：牛客网
+
+class Solution:
+    def VerifySquenceOfBST(self, sequence):
         # write code here
-        if not root:
-            return root
-        node=root.left
-        root.left=root.right
-        root.right=node
-        self.Mirror(root.left)
-        self.Mirror(root.right)
-        return root
+        if not sequence:
+            return False
+
+        return self.helper(sequence)
+
+    # 增加helper函数是因为对于递归来说sequence为空可以作为终止条件，而对于判断BST而言 sequence为空是False
+    def helper(self, sequence):
+        if not sequence:
+            return True
+
+        root = sequence[-1]
+        for i in range(len(sequence)):
+            if sequence[i] > root:
+                break
+
+        for right in sequence[i:-1]:
+            if right < root:
+                return False
+
+        return self.helper(sequence[:i]) and self.helper(sequence[i:-1])
 ```
 
 ## 从上往下打印二叉树
