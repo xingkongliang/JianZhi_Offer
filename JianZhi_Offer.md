@@ -27,22 +27,36 @@
    * 面试题23：[从上往下打印二叉树](#23-从上往下打印二叉树)
    * 面试题24：[二叉搜索树的后续遍历序列](#24-二叉搜索树的后续遍历序列)
    * 面试题25：[二叉树中和为某一值的路径](#25-二叉树中和为某一值的路径)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题26：[复杂链表的复制](#26-复杂链表的复制)
+   * 面试题27：[二叉搜索树与双向链表](#27-二叉搜索树与双向链表)
+   * 面试题28：[字符串的排列](#28-字符串的排列)
+   * 面试题29：[数组中出现次数超过一半的数字](#29-数组中出现次数超过一半的数字)
+   * 面试题30：[最小的K个数](#30-最小的K个数)
+   * 面试题31：[连续子数组的最大和](#31-连续子数组的最大和)
+   * 面试题32：[从1到n整数中1出现的次数](#32-从1到n整数中1出现的次数)
+   * 面试题33：[把数组排成最小的数](#33-把数组排成最小的数)
+   * 面试题34：[丑数](#34-丑数)
+   * 面试题35：[第一个只出现一次的字符](#35-第一个只出现一次的字符)
+   * 面试题36：[数组中的逆序对](#36-数组中的逆序对)
+   * 面试题37：[两个链表的第一个公共结点](#37-两个链表的第一个公共结点)
+   * 面试题38：[数字在排序数组中出现的次数](#38-数字在排序数组中出现的次数)
+   * 面试题39：[二叉树的深度](#39-二叉树的深度)
+   * 面试题39-2：[平衡二叉树](#39-2-平衡二叉树)
+   * 面试题40：[数组中只出现一次的数字](#40-数组中只出现一次的数字)
+   * 面试题41：[和为s的两个数字VS和为s的连续正数序列](#41-和为s的两个数字VS和为s的连续正数序列)
+   * 面试题42：[翻转单词顺序VS左旋转字符串](#42-翻转单词顺序VS左旋转字符串)
+   * 面试题43：[n个骰子的点数](#43-n个骰子的点数)
+   * 面试题44：[扑克牌的顺子](#44-扑克牌的顺子)
+   * 面试题45：[圆圈中最后剩下的数字](#45-圆圈中最后剩下的数字)
+   * 面试题46：[求1+2+3+...+n](#46-求1+2+3+...+n)
+   * 面试题47：[不用减加乘除做加法](#47-不用减加乘除做加法)
+   * 面试题48：[不能被继承的类](#48-不能被继承的类)
+   * 面试题49：[把字符串转换成整数](#49-把字符串转换成整数)
+   * 面试题50：[树中两个结点的最低公共祖先](#50-树中两个结点的最低公共祖先)
 
-
-   * 面试题：[把数组排成最小的数](#把数组排成最小的数)
+   扩展：
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
-   * 面试题：[复杂链表的复制](#复杂链表的复制)
-   * 面试题37：[两个链表的第一个公共结点](#两个链表的第一个公共结点)
-   * 面试题38：[数字在排序数组中出现的次数](#数字在排序数组中出现的次数)
-   * 面试题39：[二叉树的深度](#二叉树的深度)
-   * 面试题39-2：[平衡二叉树](#平衡二叉树)
-   * 面试题40：[数组中只出现一次的数字](#数组中只出现一次的数字)
-   * 面试题：[TEMP](#TEMP)
+
 
 
 ## 二维数组中的查找
@@ -779,23 +793,7 @@ class Solution:
         return result
 ```
 
-## 两个链表的第一个公共结点
-题目描述
-输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
-```python
-链接：https://www.nowcoder.com/questionTerminal/6ab1d9a29e88450685099d45c9e31e46?f=discussion
-来源：牛客网
-
-class Solution:
-    def FindFirstCommonNode(self, pHead1, pHead2):
-        p1,p2=pHead1,pHead2
-        while p1!=p2:
-            p1 = p1.next if p1 else pHead2
-            p2 = p2.next if p2 else pHead1
-        return p1
-```
-
-## 复杂链表的复制
+## 26-复杂链表的复制
 题目描述
 输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
 
@@ -845,6 +843,336 @@ class Solution:
         return copyHead
 ```
 
+## 27-二叉搜索树与双向链表
+
+题目描述：
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+
+非递归版本
+```python
+链接：https://www.nowcoder.com/questionTerminal/947f6eb80d944a84850b0538bf0ec3a5?f=discussion
+来源：牛客网
+
+class Solution:
+    def Convert(self, pRootOfTree):
+        if not pRootOfTree:
+            return None
+
+        p = pRootOfTree
+
+        stack = []
+        resStack = []
+
+        while p or stack:
+            if p:
+                stack.append(p)
+                p = p.left
+            else:
+                node = stack.pop()
+                resStack.append(node)
+                p = node.right
+
+        resP = resStack[0]
+        while resStack:
+            top = resStack.pop(0)
+            if resStack:
+                top.right = resStack[0]
+                resStack[0].left = top
+
+        return resP
+```
+
+递归版本
+```python
+链接：https://www.nowcoder.com/questionTerminal/947f6eb80d944a84850b0538bf0ec3a5?f=discussion
+来源：牛客网
+
+class Solution:
+    def Convert(self, root):
+        if not root:
+            return None
+        if not root.left and not root.right:
+            return root
+
+        # 将左子树构建成双链表，返回链表头
+        left = self.Convert(root.left)
+        p = left
+
+        # 定位至左子树的最右的一个结点
+        while left and p.right:
+            p = p.right
+
+        # 如果左子树不为空，将当前root加到左子树链表
+        if left:
+            p.right = root
+            root.left = p
+
+        # 将右子树构造成双链表，返回链表头
+        right = self.Convert(root.right)
+        # 如果右子树不为空，将该链表追加到root结点之后
+        if right:
+            right.left = root
+            root.right = right
+
+        return left if left else root
+```
+
+## 28-字符串的排列
+
+题目描述：
+输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+
+输入描述:
+输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/fe6b651b66ae47d7acce78ffdd9a96c7?f=discussion
+来源：牛客网
+
+class Solution:
+    def Permutation(self, ss):
+        if len(ss) <= 1:
+            return ss
+        res = set()
+        # 遍历字符串，固定第一个元素，第一个元素可以取a,b,c...，然后递归求解
+        for i in range(len(ss)):
+            for j in self.Permutation(ss[:i] + ss[i+1:]): # 依次固定了元素，其他的全排列（递归求解）
+                res.add(ss[i] + j) # 集合添加元素的方法add(),集合添加去重（若存在重复字符，排列后会存在相同，如baa,baa）
+        return sorted(res)         # sorted()能对可迭代对象进行排序,结果返回一个新的list
+```
+
+## 29-数组中出现次数超过一半的数字
+题目描述：
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+
+```python
+class Solution:
+    def MoreThanHalfNum_Solution(self, numbers):
+        length = len(numbers)
+        counts = {}
+        for n in numbers:
+            if n not in counts.keys():
+                counts[n] = 0
+            counts[n] += 1
+            if counts[n] > length // 2:
+                return n
+        return 0
+```
+
+```python
+class Solution:
+    def CheckMoreThanHalf(self, array, number):
+        times = 0
+        length = len(array)
+        for i in range(length):
+            if array[i] == number:
+                times += 1
+        isMoreThanHalf = True
+        if times * 2 <= length:
+            g_bInputInvlid = True
+            isMoreThanHalf = False
+        return isMoreThanHalf
+
+    def MoreThanHalfNum(self, array):
+        result = array[0]
+        times = 1
+        length = len(array)
+        for i in range(1, length):
+            if times == 0:
+                result = array[i]
+                times = 1
+            elif array[i] == result:
+                times += 1
+            else:
+                times -= 1
+
+        if not self.CheckMoreThanHalf(array, result):
+            return 0
+```
+
+## 30-最小的K个数
+
+题目描述：
+输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4,。
+
+```python
+import random
+class Solution:
+    def GetLeastNumbers_Solution(self, tinput, k):
+        n = len(tinput)
+        if n <=0 or k > n or k == 0:
+            return []
+        start = 0
+        end = n - 1
+        index = self.partition(tinput,start,end)
+        while index != k-1:
+            if index > k - 1:
+                end = index - 1
+                index = self.partition(tinput, start, end)
+            else:
+                start = index + 1
+                index = self.partition(tinput, start, end)
+        res = tinput[:k]
+        res = sorted(res)
+        return res
+
+    def partition(self, arr, start, end):
+        if start == end:
+            p = start
+        else:
+            p = random.randrange(start, end)
+        small = start - 1
+        arr[p], arr[end] = arr[end], arr[p]
+        for index in range(start, end):
+            if arr[index] < arr[end]:
+                small += 1
+                if small != index:
+                    arr[small], arr[index] = arr[index], arr[small]
+        small += 1
+        arr[small], arr[end] = arr[end], arr[small]
+        return small
+```
+
+## 31-连续子数组的最大和
+题目描述：
+HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。给一个数组，返回它的最大连续子序列的和，你会不会被他忽悠住？(子向量的长度至少是1)
+
+```python
+class Solution:
+    def FindGreatestSumOfSubArray(self, array):
+        n = len(array)
+        if n == 0:
+            return 0
+        sum = array[0]; tempsum = array[0]
+        for i in range(1, n):
+            if tempsum >= 0:
+                tempsum = tempsum + array[i]
+            else:
+                tempsum = array[i]
+            if tempsum > sum:
+                sum = tempsum
+        return sum
+```
+
+## 32-从1到n整数中1出现的次数
+题目描述：
+求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。
+
+```python
+class Solution:
+    def NumberOf1Between1AndN_Solution(self, n):
+        counts = 0
+        for i in range(n+1):
+            num = str(i)
+            counts += num.count("1")
+        return counts
+```
+
+## 33-把数组排成最小的数
+
+题目描述：
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/8fecd3f8ba334add803bf2a06af1b993?f=discussion
+来源：牛客网
+
+class Solution:
+    def PrintMinNumber(self, numbers):
+        # write code here
+        if not numbers: return ""
+        numbers = list(map(str, numbers))
+        numbers.sort(cmp=lambda x, y: cmp(x + y, y + x))
+        return "".join(numbers).lstrip('0') or'0'
+```
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/8fecd3f8ba334add803bf2a06af1b993?f=discussion
+来源：牛客网
+
+class Solution:
+    def compare(self,num1,num2):
+        t = str(num1)+str(num2)
+        s = str(num2)+str(num1)
+        if t>s:
+            return 1
+        elif t<s:
+            return -1
+        else:
+            return 0
+
+    def PrintMinNumber(self, numbers):
+        # write code here
+        if numbers is None:
+            return ""
+        lens = len(numbers)
+        if lens ==0 :
+            return ""
+        tmpNumbers = sorted(numbers,cmp=self.compare)
+        return int(''.join(str(x)for x in tmpNumbers))
+
+print Solution().PrintMinNumber([3,32,321])
+```
+
+## 34-丑数
+
+题目描述：
+把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
+
+```python
+
+```
+
+## 35-第一个只出现一次的字符
+
+```python
+
+```
+
+## 36-数组中的逆序对
+题目描述：
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007
+输入描述:
+题目保证输入的数组中没有的相同的数字
+
+数据范围：
+
+	对于%50的数据,size<=10^4
+
+	对于%75的数据,size<=10^5
+
+	对于%100的数据,size<=2*10^5
+
+示例1
+输入
+```
+1,2,3,4,5,6,7,0
+```
+输出
+```
+7
+```
+
+```python
+
+```
+
+## 37-两个链表的第一个公共结点
+题目描述
+输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
+```python
+链接：https://www.nowcoder.com/questionTerminal/6ab1d9a29e88450685099d45c9e31e46?f=discussion
+来源：牛客网
+
+class Solution:
+    def FindFirstCommonNode(self, pHead1, pHead2):
+        p1,p2=pHead1,pHead2
+        while p1!=p2:
+            p1 = p1.next if p1 else pHead2
+            p2 = p2.next if p2 else pHead1
+        return p1
+```
 
 ## 删除链表中重复的结点
 
@@ -878,7 +1206,7 @@ class Solution:
         return new_head.next
 ```
 
-## 数字在排序数组中出现的次数
+## 38-数字在排序数组中出现的次数
 
 题目描述：
 统计一个数字在排序数组中出现的次数。
@@ -925,7 +1253,7 @@ class Solution:
         return self.GetLastK(data, k) - self.GetFirstK(data, k) + 1
 ```
 
-## 二叉树的深度
+## 39-二叉树的深度
 
 题目描述：
 输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
@@ -940,7 +1268,7 @@ class Solution:
         return (nLeft + 1) if nLeft > nRight else (nRight + 1)
 ```
 
-## 平衡二叉树
+## 39-2-平衡二叉树
 
 题目描述：
 输入一棵二叉树，判断该二叉树是否是平衡二叉树。
@@ -966,7 +1294,7 @@ class Solution:
         return self.IsBalanced_Solution(pRoot.left) and self.IsBalanced_Solution(pRoot.right)
 ```
 
-## 数组中只出现一次的数字
+## 40-数组中只出现一次的数字
 
 题目描述：
 一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。
@@ -1022,49 +1350,4 @@ class Solution:
         """
         num = num >> idx
         return num & 1
-```
-## 把数组排成最小的数
-
-题目描述：
-输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
-
-```python
-链接：https://www.nowcoder.com/questionTerminal/8fecd3f8ba334add803bf2a06af1b993?f=discussion
-来源：牛客网
-
-class Solution:
-    def PrintMinNumber(self, numbers):
-        # write code here
-        if not numbers: return ""
-        numbers = list(map(str, numbers))
-        numbers.sort(cmp=lambda x, y: cmp(x + y, y + x))
-        return "".join(numbers).lstrip('0') or'0'
-```
-
-```python
-链接：https://www.nowcoder.com/questionTerminal/8fecd3f8ba334add803bf2a06af1b993?f=discussion
-来源：牛客网
-
-class Solution:
-    def compare(self,num1,num2):
-        t = str(num1)+str(num2)
-        s = str(num2)+str(num1)
-        if t>s:
-            return 1
-        elif t<s:
-            return -1
-        else:
-            return 0
-
-    def PrintMinNumber(self, numbers):
-        # write code here
-        if numbers is None:
-            return ""
-        lens = len(numbers)
-        if lens ==0 :
-            return ""
-        tmpNumbers = sorted(numbers,cmp=self.compare)
-        return int(''.join(str(x)for x in tmpNumbers))
-
-print Solution().PrintMinNumber([3,32,321])
 ```
