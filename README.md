@@ -13,6 +13,8 @@
 
 - [排序](./sorts.md)
 
+- [链表](./Linked_List.md)
+
 - [剑指offer题解](./JianZhi_Offer.md)
 
 - [LeetCode题解](./LeetCodeLeetCode.md)

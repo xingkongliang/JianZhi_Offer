@@ -23,8 +23,10 @@
    * 面试题19：[二叉树的镜像](#二叉树的镜像)
    * 面试题20：[顺时针打印矩阵](#顺时针打印矩阵)
    * 面试题21：[包含min函数的栈](#包含min函数的栈)
-   * 面试题22：[栈的压入、弹出序列](#22-栈的压入弹出序列)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题22：[栈的压入、弹出序列](#22-栈的压入、弹出序列)
+   * 面试题23：[从上往下打印二叉树](#23-从上往下打印二叉树)
+   * 面试题24：[二叉搜索树的后续遍历序列](#24-二叉搜索树的后续遍历序列)
+   * 面试题25：[二叉树中和为某一值的路径](#25-二叉树中和为某一值的路径)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
@@ -33,8 +35,6 @@
 
 
    * 面试题：[把数组排成最小的数](#把数组排成最小的数)
-   * 面试题：[二叉搜索树的后续遍历序列](#二叉搜索树的后续遍历序列)
-   * 面试题：[从上往下打印二叉树](#从上往下打印二叉树)
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
    * 面试题：[复杂链表的复制](#复杂链表的复制)
    * 面试题37：[两个链表的第一个公共结点](#两个链表的第一个公共结点)
@@ -645,7 +645,138 @@ class Solution:
 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
 
 ```python
+链接：https://www.nowcoder.com/questionTerminal/d77d11405cc7470d82554cb392585106?f=discussion
+来源：牛客网
 
+class Solution:
+    def IsPopOrder(self, pushV, popV):
+        # stack中存入pushV中取出的数据
+        stack=[]
+        while popV:
+            # 如果第一个元素相等，直接都弹出，根本不用压入stack
+            if pushV and popV[0]==pushV[0]:
+                popV.pop(0)
+                pushV.pop(0)
+            #如果stack的最后一个元素与popV中第一个元素相等，将两个元素都弹出
+            elif stack and stack[-1]==popV[0]:
+                stack.pop()
+                popV.pop(0)
+            # 如果pushV中有数据，压入stack
+            elif pushV:
+                stack.append(pushV.pop(0))
+            # 上面情况都不满足，直接返回false。
+            else:
+                return False
+        return True
+```
+
+## 23-从上往下打印二叉树
+题目描述
+从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/7fe2212963db4790b57431d9ed259701?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回从上到下每个节点值列表，例：[1,2,3]
+    def PrintFromTopToBottom(self, root):
+        # write code here
+        if not root:
+            return []
+        queue = []
+        result = []
+
+        queue.append(root)
+        while len(queue) > 0:
+            node = queue.pop(0)
+            result.append(node.val)
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+
+        return result
+```
+
+## 24-二叉搜索树的后续遍历序列
+
+题目描述
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+```python
+链接：https://www.nowcoder.com/questionTerminal/a861533d45854474ac791d90e447bafd?f=discussion
+来源：牛客网
+
+class Solution:
+    def VerifySquenceOfBST(self, sequence):
+        # write code here
+        if not sequence:
+            return False
+
+        return self.helper(sequence)
+
+    # 增加helper函数是因为对于递归来说sequence为空可以作为终止条件，而对于判断BST而言 sequence为空是False
+    def helper(self, sequence):
+        if not sequence:
+            return True
+
+        root = sequence[-1]
+        for i in range(len(sequence)):
+            if sequence[i] > root:
+                break
+
+        for right in sequence[i:-1]:
+            if right < root:
+                return False
+
+        return self.helper(sequence[:i]) and self.helper(sequence[i:-1])
+```
+
+## 25-二叉树中和为某一值的路径
+题目描述：
+输入一颗二叉树的根节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)
+
+思路：
+- 递归先序遍历树， 把结点加入路径。
+- 若该结点是叶子结点则比较当前路径和是否等于期待和。
+- 弹出结点，每一轮递归返回到父结点时，当前路径也应该回退一个结点
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/b736e784e3e34731af99065031301bca?f=discussion
+来源：牛客网
+
+class Solution:
+    # 返回二维列表，内部每个列表表示找到的路径
+    def FindPath(self, root, expectNumber):
+        # write code here
+        if not root:
+            return []
+
+        result = []
+
+        def FindPathMain(root, path, currentSum):
+            currentSum += root.val
+
+            path.append(root)
+            isLeaf = root.left == None and root.right == None
+
+            if currentSum == expectNumber and isLeaf:
+                onePath = []
+                for node in path:
+                    onePath.append(node.val)
+                result.append(onePath)
+
+            if currentSum < expectNumber:
+                if root.left:
+                    FindPathMain(root.left, path, currentSum)
+                if root.right:
+                    FindPathMain(root.right, path, currentSum)
+
+            path.pop()
+
+        FindPathMain(root, [], 0)
+
+        return result
 ```
 
 ## 两个链表的第一个公共结点
@@ -714,67 +845,6 @@ class Solution:
         return copyHead
 ```
 
-## 二叉搜索树的后续遍历序列
-
-题目描述
-输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
-```python
-链接：https://www.nowcoder.com/questionTerminal/a861533d45854474ac791d90e447bafd?f=discussion
-来源：牛客网
-
-class Solution:
-    def VerifySquenceOfBST(self, sequence):
-        # write code here
-        if not sequence:
-            return False
-
-        return self.helper(sequence)
-
-    # 增加helper函数是因为对于递归来说sequence为空可以作为终止条件，而对于判断BST而言 sequence为空是False
-    def helper(self, sequence):
-        if not sequence:
-            return True
-
-        root = sequence[-1]
-        for i in range(len(sequence)):
-            if sequence[i] > root:
-                break
-
-        for right in sequence[i:-1]:
-            if right < root:
-                return False
-
-        return self.helper(sequence[:i]) and self.helper(sequence[i:-1])
-```
-
-## 从上往下打印二叉树
-题目描述
-从上往下打印出二叉树的每个节点，同层节点从左至右打印。
-
-```python
-链接：https://www.nowcoder.com/questionTerminal/7fe2212963db4790b57431d9ed259701?f=discussion
-来源：牛客网
-
-class Solution:
-    # 返回从上到下每个节点值列表，例：[1,2,3]
-    def PrintFromTopToBottom(self, root):
-        # write code here
-        if not root:
-            return []
-        queue = []
-        result = []
-
-        queue.append(root)
-        while len(queue) > 0:
-            node = queue.pop(0)
-            result.append(node.val)
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
-
-        return result
-```
 
 ## 删除链表中重复的结点
 
