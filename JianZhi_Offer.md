@@ -55,7 +55,14 @@
    * 面试题50：[树中两个结点的最低公共祖先](#50-树中两个结点的最低公共祖先)
 
    扩展：
+   * 面试题：[链表中环的入口结点](#链表中环的入口结点)
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
+   * 面试题：[二叉树的下一个结点](#二叉树的下一个结点)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
 
 
 
@@ -1174,38 +1181,6 @@ class Solution:
         return p1
 ```
 
-## 删除链表中重复的结点
-
-题目描述
-在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
-
-```python
-链接：https://www.nowcoder.com/questionTerminal/fc533c45b73a41b0b44ccba763f866ef?f=discussion
-来源：牛客网
-
-class Solution:
-    def deleteDuplication(self, pHead):
-        # write code here
-        if pHead == None or pHead.next == None:
-            return pHead
-        new_head = ListNode(-1)
-        new_head.next = pHead
-        pre = new_head
-        p = pHead
-        nex = None
-        while p != None and p.next != None:
-            nex = p.next
-            if p.val == nex.val:
-                while nex != None and nex.val == p.val:
-                    nex = nex.next
-                pre.next = nex
-                p = nex
-            else:
-                pre = p
-                p = p.next
-        return new_head.next
-```
-
 ## 38-数字在排序数组中出现的次数
 
 题目描述：
@@ -1350,4 +1325,102 @@ class Solution:
         """
         num = num >> idx
         return num & 1
+```
+
+## 链表中环的入口结点
+题目描述：
+给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+
+快指针路程=a+(b+c)k+b ，k>=1  其中b+c为环的长度，k为绕环的圈数（k>=1,即最少一圈，不能是0圈，不然和慢指针走的一样长，矛盾）。
+
+慢指针路程=a+b
+
+快指针走的路程是慢指针的两倍，所以：
+（a+b）\*2=a+(b+c)k+b
+
+化简可得：
+a=(k-1)(b+c)+c 这个式子的意思是： 链表头到环入口的距离=相遇点到环入口的距离+（k-1）圈环长度。其中k>=1,所以k-1>=0圈。所以两个指针分别从链表头和相遇点出发，最后一定相遇于环入口。
+
+```python
+class Solution:
+    def EntryNodeOfLoop(self, pHead):
+        fast = pHead
+        low = pHead
+
+        while fast != None and fast.next != None:
+            fast = fast.next.next
+            low = low.next
+            if fast == low:
+                break
+        if fast == None or fast.next == None:
+            return None
+        low = pHead
+        while fast != low:
+            fast = fast.next
+            low = low.next
+        return low
+```
+
+
+## 删除链表中重复的结点
+
+题目描述
+在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/fc533c45b73a41b0b44ccba763f866ef?f=discussion
+来源：牛客网
+
+class Solution:
+    def deleteDuplication(self, pHead):
+        # write code here
+        if pHead == None or pHead.next == None:
+            return pHead
+        new_head = ListNode(-1)
+        new_head.next = pHead
+        pre = new_head
+        p = pHead
+        nex = None
+        while p != None and p.next != None:
+            nex = p.next
+            if p.val == nex.val:
+                while nex != None and nex.val == p.val:
+                    nex = nex.next
+                pre.next = nex
+                p = nex
+            else:
+                pre = p
+                p = p.next
+        return new_head.next
+```
+
+## 二叉树的下一个结点
+
+题目描述：
+给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+
+
+![二叉树的下一个结点](https://uploadfiles.nowcoder.com/files/20171225/773262_1514198075109_20151104234034251)
+
+链接：https://www.nowcoder.com/questionTerminal/9023a0c988684a53960365b889ceaf5e?f=discussion
+来源：牛客网
+
+结合图，我们可发现分成两大类：1、有右子树的，那么下个结点就是右子树最左边的点；（eg：D，B，E，A，C，G） 2、没有右子树的，也可以分成两类，a)是父节点左孩子（eg：N，I，L） ，那么父节点就是下一个节点 ； b)是父节点的右孩子（eg：H，J，K，M）找他的父节点的父节点的父节点...直到当前结点是其父节点的左孩子位置。如果没有eg：M，那么他就是尾节点。
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/9023a0c988684a53960365b889ceaf5e?f=discussion
+来源：牛客网
+
+class Solution:
+    def GetNext(self, pNode):
+        if pNode.right:#有右子树
+            p=pNode.right
+            while p.left:
+                p=p.left
+            return p
+        while pNode.next:#无右子树，则找第一个当前节点是父节点左孩子的节点
+            if(pNode.next.left==pNode):
+                return pNode.next
+            pNode = pNode.next#沿着父节点向上遍历
+        return None  #到了根节点仍没找到，则返回空
 ```
