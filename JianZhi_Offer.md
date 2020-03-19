@@ -58,11 +58,11 @@
    * 面试题：[链表中环的入口结点](#链表中环的入口结点)
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
    * 面试题：[二叉树的下一个结点](#二叉树的下一个结点)
+   * 面试题：[对称的二叉树](#对称的二叉树)
+   * 面试题：[按之字形顺序打印二叉树](#按之字形顺序打印二叉树)
    * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题：[二叉搜索树的第k个结点](#二叉搜索树的第k个结点)
+   * 面试题：[剪绳子](#剪绳子)
 
 
 
@@ -753,6 +753,41 @@ class Solution:
         return self.helper(sequence[:i]) and self.helper(sequence[i:-1])
 ```
 
+链接：https://www.nowcoder.com/questionTerminal/a861533d45854474ac791d90e447bafd?f=discussion
+来源：牛客网
+
+python:后序遍历 的序列中，最后一个数字是树的根节点 ，数组中前面的数字可以分为两部分：第一部分是左子树节点 的值，都比根节点的值小；第二部分 是右子树 节点的值，都比 根 节点 的值大，后面用递归分别判断前后两部分 是否 符合以上原则
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/a861533d45854474ac791d90e447bafd?f=discussion
+来源：牛客网
+
+class Solution:
+    def VerifySquenceOfBST(self, sequence):
+        # write code here
+        if sequence==None or len(sequence)==0:
+            return False
+        length=len(sequence)
+        root=sequence[length-1]
+        # 在二叉搜索 树中 左子树节点小于根节点
+        for i in range(length):
+            if sequence[i]>root:
+                break
+        # 二叉搜索树中右子树的节点都大于根节点
+        for j  in range(i,length):
+            if sequence[j]<root:
+                return False
+        # 判断左子树是否为二叉树
+        left=True
+        if  i>0:
+            left=self.VerifySquenceOfBST(sequence[0:i])
+        # 判断 右子树是否为二叉树
+        right=True
+        if i<length-1:
+            right=self.VerifySquenceOfBST(sequence[i:-1])
+        return left and right
+```
+
 ## 25-二叉树中和为某一值的路径
 题目描述：
 输入一颗二叉树的根节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)
@@ -1423,4 +1458,97 @@ class Solution:
                 return pNode.next
             pNode = pNode.next#沿着父节点向上遍历
         return None  #到了根节点仍没找到，则返回空
+```
+
+
+## 对称的二叉树
+
+题目描述：
+请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+
+思路：
+* 首先根节点以及其左右子树，左子树的左子树和右子树的右子树相同
+* 左子树的右子树和右子树的左子树相同即可，采用递归
+
+```python
+class Solution:
+    def comRoot(self, left, right):
+        if left == None:
+            return right == None
+        if right == None:
+            return left == None
+        if left.val != right.val:
+            return False
+        return self.comRoot(left.right, right.left) and self.comRoot(left.left, right.right)
+
+    def isSymmetrical(self, pRoot):
+        if pRoot == None:
+            return True
+        return self.comRoot(pRoot.left, pRoot.right)
+```
+
+## 按之字形顺序打印二叉树
+题目描述：
+请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+
+```python
+
+```
+## 二叉搜索树的第k个结点
+
+题目描述：
+给定一棵二叉搜索树，请找出其中的第k小的结点。例如， （5，3，7，2，4，6，8）    中，按结点数值大小顺序第三小结点的值为4。
+
+思路：二叉搜索树按照中序遍历的顺序打印出来正好就是排序好的顺序。所以，按照中序遍历顺序找到第k个结点就是结果。
+
+```python
+class Solution:
+    # 返回对应节点TreeNode
+    def __init__(self):
+        self.index = 0
+    def KthNode(self, pRoot, k):
+        if pRoot == None:
+            return None
+        node = self.KthNode(pRoot.left, k)
+        if node != None:
+            return node
+        self.index += 1
+        if self.index == k:
+            return pRoot
+        node = self.KthNode(pRoot.right, k)
+        if node != None:
+            return node
+```
+
+## 剪绳子
+题目描述：
+给你一根长度为n的绳子，请把绳子剪成整数长的m段（m、n都是整数，n>1并且m>1），每段绳子的长度记为k[0],k[1],...,k[m]。请问k[0]xk[1]x...xk[m]可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+输入描述:
+输入一个数n，意义见题面。（2 <= n <= 60）
+输出描述:
+输出答案。
+
+示例1
+
+输入
+8
+
+输出
+18
+
+```python
+class Solution:
+    def cutRope(self, number):
+        if number == 2:
+            return 1
+        if number == 3:
+            return 2
+        x = number % 3
+        y = number // 3
+        if x == 0:
+            return 3 ** y
+        elif x == 1:
+            return 2 * 2 * 3 ** (y-1)
+        else:
+            return 2 * 3 ** y
 ```
