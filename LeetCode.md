@@ -1,10 +1,10 @@
 
 
 
-   * 面试题：[通配符匹配](#通配符匹配)
-   * 面试题：[跳跃游戏II](#跳跃游戏II)
-   * 面试题：[加油站](#加油站)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题：[通配符匹配|greedy|](#通配符匹配)
+   * 面试题：[跳跃游戏II|greedy|](#跳跃游戏II)
+   * 面试题：[加油站](#加油站|greedy|)
+   * 面试题：[135-分发糖果|greedy|](#135-分发糖果)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
@@ -137,4 +137,78 @@ class Solution:
                 curr_tank = 0
 
         return starting_station if total_tank >= 0 else -1
+```
+
+## 135-分发糖果
+
+老师想给孩子们分发糖果，有 N 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
+
+你需要按照以下要求，帮助老师给这些孩子分发糖果：
+
+每个孩子至少分配到 1 个糖果。
+相邻的孩子中，评分高的孩子必须获得更多的糖果。
+那么这样下来，老师至少需要准备多少颗糖果呢？
+
+```python
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        left = [1 for i in range(len(ratings))]
+        right = left[:]
+
+        for i in range(1, len(ratings)):
+            if ratings[i] > ratings[i-1]:
+                left[i] = left[i-1] + 1
+        count = left[-1]
+        for i in range(len(ratings)-2, -1, -1):
+            if ratings[i] > ratings[i+1]:
+                right[i] = right[i+1] + 1
+            count += max(left[i], right[i])
+        return count
+```
+
+## 去除重复字母
+
+给你一个仅包含小写字母的字符串，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+
+示例 1:
+
+输入: "bcabc"
+输出: "abc"
+示例 2:
+
+输入: "cbacdcbc"
+输出: "acdb"
+
+https://leetcode-cn.com/problems/remove-duplicate-letters/solution/zhan-by-liweiwei1419/
+
+- 1、遍历字符串里的字符，如果读到的字符的 ASCII 值是升序，依次存到一个栈中；
+- 2、如果读到的字符在栈中已经存在，这个字符我们不需要；
+- 3、如果读到的 ASCII 值比栈顶元素严格小，看看栈顶元素在后面是否还会出现，如果还会出现，则舍弃栈顶元素，而选择后出现的那个字符，这样得到的字典序更小。
+
+```python
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        size = len(s)
+
+        last_appear_index = [0 for _ in range(26)]
+        if_in_stack = [False for _ in range(26)]
+
+        # 记录每个字符最后一次出现的索引
+        for i in range(size):
+            last_appear_index[ord(s[i]) - ord('a')] = i
+
+        stack = []
+        for i in range(size):
+            if if_in_stack[ord(s[i]) - ord('a')]:
+                continue
+
+            while stack and ord(stack[-1]) > ord(s[i]) and \
+                    last_appear_index[ord(stack[-1]) - ord('a')] >= i:
+                top = stack.pop()
+                if_in_stack[ord(top) - ord('a')] = False
+
+            stack.append(s[i])
+            if_in_stack[ord(s[i]) - ord('a')] = True
+
+        return ''.join(stack)
 ```
