@@ -1458,12 +1458,83 @@ class Solution:
         return "".join(s)
 ```
 
+## 构建乘积数组
+
+题目描述：
+给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0] * A[1] * ... * A[i-1] * A[i+1] * ... * A[n-1]。不能使用除法。（注意：规定B[0] = A[1] * A[2] * ... * A[n-1]，B[n-1] = A[0] * A[1] * ... * A[n-2];）
+
+![构建乘积数组-1](https://uploadfiles.nowcoder.com/images/20160829/841505_1472459965615_8640A8F86FB2AB3117629E2456D8C652)
+
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/94a4d381a68b47b7a8bed86f2975db46?f=discussion
+来源：牛客网
+
+public class Solution {
+    public int[] multiply(int[] A) {
+        int length = A.length;
+        int[] B = new int[length];
+        if(length != 0 ){
+            B[0] = 1;
+            //计算下三角连乘
+            for(int i = 1; i < length; i++){
+                B[i] = B[i-1] * A[i-1];
+            }
+            int temp = 1;
+            //计算上三角
+            for(int j = length-2; j >= 0; j--){
+                temp *= A[j+1];
+                B[j] *= temp;
+            }
+        }
+        return B;
+    }
+}
+```
+
 ## 正则表达式匹配
 题目描述：
 请实现一个函数用来匹配包括'.'和'\*'的正则表达式。模式中的字符'.'表示任意一个字符，而'\*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
 
 ```python
+链接：https://www.nowcoder.com/questionTerminal/45327ae22b7b413ea21df13ee7d6429c?f=discussion
+来源：牛客网
 
+class Solution:
+    # s, pattern都是字符串
+    def match(self, s, pattern):
+        # 如果s与pattern都为空，则True
+        if len(s) == 0 and len(pattern) == 0:
+            return True
+        # 如果s不为空，而pattern为空，则False
+        elif len(s) != 0 and len(pattern) == 0:
+            return False
+        # 如果s为空，而pattern不为空，则需要判断
+        elif len(s) == 0 and len(pattern) != 0:
+            # pattern中的第二个字符为*，则pattern后移两位继续比较
+            if len(pattern) > 1 and pattern[1] == '*':
+                return self.match(s, pattern[2:])
+            else:
+                return False
+        # s与pattern都不为空的情况
+        else:
+            # pattern的第二个字符为*的情况
+            if len(pattern) > 1 and pattern[1] == '*':
+                # s与pattern的第一个元素不同，则s不变，pattern后移两位，相当于pattern前两位当成空
+                if s[0] != pattern[0] and pattern[0] != '.':
+                    return self.match(s, pattern[2:])
+                else:
+                    # 如果s[0]与pattern[0]相同，且pattern[1]为*，这个时候有三种情况
+                    # pattern后移2个，s不变；相当于把pattern前两位当成空，匹配后面的
+                    # pattern后移2个，s后移1个；相当于pattern前两位与s[0]匹配
+                    # pattern不变，s后移1个；相当于pattern前两位，与s中的多位进行匹配，因为*可以匹配多位
+                    return self.match(s, pattern[2:]) or self.match(s[1:], pattern[2:]) or self.match(s[1:], pattern)
+            # pattern第二个字符不为*的情况
+            else:
+                if s[0] == pattern[0] or pattern[0] == '.':
+                    return self.match(s[1:], pattern[1:])
+                else:
+                    return False
 ```
 
 ## 表示数值的字符串
@@ -1472,7 +1543,56 @@ class Solution:
 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
 
 ```python
+链接：https://www.nowcoder.com/questionTerminal/6f8c901d091949a5837e24bb82a731f2?f=discussion
+来源：牛客网
 
+class Solution:
+    # s字符串
+    def isNumeric(self, s):
+        # write code here
+        if len(s) <= 0:
+            return False
+        # 分别标记是否出现过正负号、小数点、e，因为这几个需要特殊考虑
+        has_sign = False
+        has_point = False
+        has_e = False
+        for i in range(len(s)):
+            # 对于e的情况
+            if s[i] == 'E' or s[i] == 'e':
+                # 不同出现两个e
+                if has_e:
+                    return False
+                # e不能出现在最后面，因为e后面要接数字
+                else:
+                    has_e = True
+                    if i == len(s) -1:
+                        return False   
+            # 对于符号位的情况
+            elif s[i] == '+' or s[i] == '-':
+                # 如果前面已经出现过了符号位，那么这个符号位，必须是跟在e后面的
+                if has_sign:
+                    if s[i-1] != 'e' and s[i-1] != 'E':
+                        return False
+                # 如果这是第一次出现符号位，而且出现的位置不是字符串第一个位置，那么就只能出现在e后面
+                else:
+                    has_sign = True
+                    if i > 0 and s[i-1] != 'e' and s[i-1] != 'E':
+                        return False
+            # 对于小数点的情况
+            elif s[i] == '.':
+                # 小数点不能出现两次；而且如果已经出现过e了，那么就不能再出现小数点，因为e后面只能是整数
+                if has_point or has_e:
+                    return False
+                # 如果是第一次出现小数点，如果前面出现过e，那么还是不能出现小数点
+                else:
+                    has_point = True
+                    if i > 0 and (s[i-1] == 'e' or s[i-1] == 'E'):
+                        return False
+            else:
+                # 其他字符必须是‘0’到‘9’之间的
+                if s[i] < '0' or s[i] > '9':
+                    return False
+        return True
 ```
 
 ## 链表中环的入口结点
