@@ -55,14 +55,21 @@
    * 面试题50：[树中两个结点的最低公共祖先](#50-树中两个结点的最低公共祖先)
 
    扩展：
+
+   * 面试题：[左旋转字符串](#左旋转字符串)
+   * 面试题：[二叉搜索树的第k个结点](#二叉搜索树的第k个结点)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
    * 面试题：[链表中环的入口结点](#链表中环的入口结点)
    * 面试题：[删除链表中重复的结点](#删除链表中重复的结点)
    * 面试题：[二叉树的下一个结点](#二叉树的下一个结点)
    * 面试题：[对称的二叉树](#对称的二叉树)
    * 面试题：[按之字形顺序打印二叉树](#按之字形顺序打印二叉树)
-   * 面试题：[左旋转字符串](#左旋转字符串)
    * 面试题：[把二叉树打印成多行](#把二叉树打印成多行)
-   * 面试题：[二叉搜索树的第k个结点](#二叉搜索树的第k个结点)
+   * 面试题：[数据流中的中位数](#数据流中的中位数)
+   * 面试题：[滑动窗口的最大值](#滑动窗口的最大值)
+   * 面试题：[矩阵中的路径](#矩阵中的路径)
+   * 面试题：[机器人的运动范围](#机器人的运动范围)
    * 面试题：[剪绳子](#剪绳子)
 
 
@@ -119,7 +126,6 @@ class Solution:
 class Solution:
     # 返回从尾部到头部的列表值序列，例如[1,2,3]
     def printListFromTailToHead(self, listNode):
-        # write code here
         lst,lst_bak = [],[]
         if not listNode:
             return lst
@@ -366,6 +372,24 @@ class Solution:
         return array
 ```
 
+如果没有要求相对位置不变：
+
+```python
+class Solution:
+    def reOrderArray(self, array):
+        pBegin = 0
+        pEnd = len(array) - 1
+        while pBegin < pEnd:
+            while pBegin < pEnd and array[pBegin] % 2 != 0:
+                pBegin += 1
+            while pBegin < pEnd and array[pEnd] % 2 != 1:
+                pEnd -= 1
+            if pBegin < pEnd:
+                temp = array[pBegin]
+                array[pBegin] = array[pEnd]
+                array[pEnd] = temp
+        return array
+```
 ## 15-链表中倒数第k个结点
 
 题目描述：
@@ -697,27 +721,20 @@ class Solution:
 从上往下打印出二叉树的每个节点，同层节点从左至右打印。
 
 ```python
-链接：https://www.nowcoder.com/questionTerminal/7fe2212963db4790b57431d9ed259701?f=discussion
-来源：牛客网
-
 class Solution:
     # 返回从上到下每个节点值列表，例：[1,2,3]
     def PrintFromTopToBottom(self, root):
-        # write code here
         if not root:
             return []
-        queue = []
         result = []
-
-        queue.append(root)
-        while len(queue) > 0:
-            node = queue.pop(0)
+        stack = [root]
+        while stack:
+            node = stack.pop(0)
             result.append(node.val)
             if node.left:
-                queue.append(node.left)
+                stack.append(node.left)
             if node.right:
-                queue.append(node.right)
-
+                stack.append(node.right)
         return result
 ```
 
@@ -1417,6 +1434,29 @@ class Solution:
         return num & 1
 ```
 
+## 左旋转字符串
+题目描述：
+汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
+
+```python
+class Solution:
+    def LeftRotateString(self, s, n):
+        if len(s) == 0 or n <= 0:
+            return s
+        def Inver(s, start, end):
+            while end > start:
+                s[start], s[end] = s[end], s[start]
+                end -= 1
+                start += 1
+            return s
+        s = list(s)
+        s = Inver(s, 0, len(s)-1)
+        s = Inver(s, 0, len(s)-1-n)
+        s = Inver(s, len(s)-n, len(s)-1)
+        return "".join(s)
+```
+
+
 ## 链表中环的入口结点
 题目描述：
 给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
@@ -1543,36 +1583,44 @@ class Solution:
 ```
 
 ## 按之字形顺序打印二叉树
+
 题目描述：
 请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
 
-```python
-
-```
-
-## 左旋转字符串
-题目描述：
-汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
 
 ```python
+链接：https://www.nowcoder.com/questionTerminal/91b69814117f4e8097390d107d2efbe0?f=discussion
+来源：牛客网
+
 class Solution:
-    def LeftRotateString(self, s, n):
-        if len(s) == 0 or n <= 0:
-            return s
-        def Inver(s, start, end):
-            while end > start:
-                s[start], s[end] = s[end], s[start]
-                end -= 1
-                start += 1
-            return s
-        s = list(s)
-        s = Inver(s, 0, len(s)-1)
-        s = Inver(s, 0, len(s)-1-n)
-        s = Inver(s, len(s)-n, len(s)-1)
-        return "".join(s)
+    def Print(self, pRoot):
+        if not pRoot:
+            return []
+
+        stack = [pRoot]
+        result = []
+        while stack:
+            res = []
+            nextStack = []
+            for i in stack:
+                res.append(i.val)
+                if i.left:
+                    nextStack.append(i.left)
+                if i.right:
+                    nextStack.append(i.right)
+            stack=nextStack
+            result.append(res)
+        returnResult = []
+        for i, v in enumerate(result):
+            if i % 2 == 0:
+                returnResult.append(v)
+            else:
+                returnResult.append(v[::-1])  # 奇数层则反向打印，从0层开始
+        return returnResult
 ```
 
 ## 把二叉树打印成多行
+
 题目描述：
 从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
 ```python
@@ -1596,6 +1644,46 @@ class Solution:
             stack = nextStack
             result.append(res)
         return result
+```
+
+## 序列化二叉树
+
+题目描述：
+请实现两个函数，分别用来序列化和反序列化二叉树
+
+二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（#），以 ！ 表示一个结点值的结束（value!）。
+
+二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。
+
+
+```python
+链接：https://www.nowcoder.com/questionTerminal/cf7e25aa97c04cc1a68c8f040e71fb84?f=discussion
+来源：牛客网
+
+class Solution:
+    def __init__(self):
+        self.flag = -1
+
+    def Serialize(self, root):
+        # write code here
+        if not root:
+            return '#,'
+        return str(root.val)+','+self.Serialize(root.left)+self.Serialize(root.right)
+
+    def Deserialize(self, s):
+        # write code here
+        self.flag += 1
+        l = s.split(',')
+
+        if self.flag >= len(s):
+            return None
+        root = None
+
+        if l[self.flag] != '#':
+            root = TreeNode(int(l[self.flag]))
+            root.left = self.Deserialize(s)
+            root.right = self.Deserialize(s)
+        return root
 ```
 
 ## 二叉搜索树的第k个结点
@@ -1624,6 +1712,135 @@ class Solution:
             return node
 ```
 
+## 数据流中的中位数
+题目描述：
+如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+
+```python
+
+```
+
+## 滑动窗口的最大值
+
+题目描述：
+给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}； 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个： {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
+
+**解题**：双向队列，queue存入num的位置，时间复杂度O(n)
+```python
+class Solution:
+    def maxInWindows(self, num, size):
+        queue, res, i = [], [], 0
+        if size <= 0:
+            return res
+        for i in range(len(num)):
+            # 若最大值queue[0]位置过期 则弹出
+            if len(queue) > 0 and i-size+1 > queue[0]:   
+                queue.pop(0)
+            # 每次弹出所有比num[i]小的数字
+            while len(queue) > 0 and num[queue[-1]] < num[i]:  
+                queue.pop()
+            queue.append(i)
+            if i >= size-1:
+                res.append(num[queue[0]])
+        return res
+```
+
+## 矩阵中的路径
+
+题目描述：
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。 例如
+$$
+  \begin{matrix}
+   a & b & c & e \\
+   s & f & c & s \\
+   a & d & e & e
+  \end{matrix} \tag{1}
+$$
+矩阵中包含一条字符串"bcced"的路径，但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
+
+
+**题解：**
+链接：https://www.nowcoder.com/questionTerminal/c61c6999eecb4b8f88a98f66b273a3cc?f=discussion
+来源：牛客网
+
+回溯
+基本思想：
+
+0. 根据给定数组，初始化一个标志位数组，初始化为false，表示未走过，true表示已经走过，不能走第二次
+1. 根据行数和列数，遍历数组，先找到一个与str字符串的第一个元素相匹配的矩阵元素，进入judge
+2. 根据i和j先确定一维数组的位置，因为给定的matrix是一个一维数组
+3. 确定递归终止条件：越界，当前找到的矩阵值不等于数组对应位置的值，已经走过的，这三类情况，都直接false，说明这条路不通
+4. 若k，就是待判定的字符串str的索引已经判断到了最后一位，此时说明是匹配成功的
+5. 下面就是本题的精髓，递归不断地寻找周围四个格子是否符合条件，只要有一个格子符合条件，就继续再找这个符合条件的格子的四周是否存在符合条件的格子，直到k到达末尾或者不满足递归条件就停止。
+6. 走到这一步，说明本次是不成功的，我们要还原一下标志位数组index处的标志位，进入下一轮的判断。
+
+```python
+class Solution:
+    def hasPath(self, matrix, rows, cols, path):
+        flag = [False for _ in range(len(matrix))]
+        for i in range(rows):
+            for j in range(cols):
+                if self.judge(matrix, i, j, rows, cols, flag, path, 0):
+                    return True
+        return False
+
+    def judge(self, matrix, i, j, rows, cols, flag, path, k):
+        index = i * cols + j
+        if i<0 or j<0 or i>=rows or j>=cols or matrix[index]!=path[k] or flag[index]==True:
+            return False
+        if k == len(path)-1:
+            return True
+        flag[index] = True
+        if self.judge(matrix,i-1,j,rows,cols,flag,path,k+1) or \
+            self.judge(matrix,i+1,j,rows,cols,flag,path,k+1) or \
+            self.judge(matrix,i,j-1,rows,cols,flag,path,k+1) or \
+            self.judge(matrix,i,j+1,rows,cols,flag,path,k+1):
+            return True
+        flag[index] = False
+        return False
+
+print(Solution().hasPath(matrix="ABCESFCSADEE",
+                         rows=3,
+                         cols=4,
+                         path="ABCCED"))
+```
+
+## 机器人的运动范围
+题目描述：
+地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子？
+
+题解：
+
+思路：将地图全部置1，遍历能够到达的点，将遍历的点置0并令计数+1.这个思路在找前后左右相连的点很有用，比如leetcode中的海岛个数问题/最大海岛问题都可以用这种方法来求解。
+
+
+```python
+class Solution:
+    def __init__(self):
+        self.count = 0
+
+    def movingCount(self, threshold, rows, cols):
+        arr = [[1 for i in range(cols)] for j in range(rows)]
+        self.findway(arr, 0, 0, threshold)
+        return self.count
+
+    def findway(self, arr, i, j, k):
+        if i < 0 or j < 0 or i >= len(arr) or j >= len(arr[0]):
+            return
+        tmpi = list(map(int, list(str(i))))
+        tmpj = list(map(int, list(str(j))))
+        if sum(tmpi) + sum(tmpj) > k or arr[i][j] != 1:
+            return
+        arr[i][j] = 0
+        self.count += 1
+        self.findway(arr, i + 1, j, k)
+        self.findway(arr, i - 1, j, k)
+        self.findway(arr, i, j + 1, k)
+        self.findway(arr, i, j - 1, k)
+
+print(Solution().movingCount(12, 10, 8))
+```
+
 ## 剪绳子
 题目描述：
 给你一根长度为n的绳子，请把绳子剪成整数长的m段（m、n都是整数，n>1并且m>1），每段绳子的长度记为k[0],k[1],...,k[m]。请问k[0]xk[1]x...xk[m]可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
@@ -1633,12 +1850,11 @@ class Solution:
 输出答案。
 
 示例1
+```
+输入 8
 
-输入
-8
-
-输出
-18
+输出 18
+```
 
 ```python
 class Solution:

@@ -1,15 +1,418 @@
+# LeetCode
+
+   * 面试题：[5-最长回文子串](#5-最长回文子串)
+   * 面试题：[32-最长有效括号](#32-最长有效括号)
+   * 面试题：[62-不同路径](#62-不同路径)
+   * 面试题：[63-不同路径II](#63-不同路径II)
+   * 面试题：[64-最小路径和](#64-最小路径和)
+   * 面试题：[72-编辑距离](#72-编辑距离)
+   * 面试题：[84-柱状图中最大的矩形](#84-柱状图中最大的矩形)
+   * 面试题：[85-最大矩形](#85-最大矩形)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+
+   * 面试题：[通配符匹配](#通配符匹配)
+   * 面试题：[跳跃游戏II](#跳跃游戏II)
+   * 面试题：[加油站](#加油站)
+   * 面试题：[135-分发糖果](#135-分发糖果)
+
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+
+
+## 5-最长回文子串
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+示例 1：
+
+输入: "babad"
+输出: "bab"
+注意: "aba" 也是一个有效答案。
+示例 2：
+
+输入: "cbbd"
+输出: "bb"
+
+### 解法
+扩展中心
+
+我们知道回文串一定是对称的，所以我们可以每次循环选择一个中心，进行左右扩展，判断左右字符是否相等即可。
+
+![5-最长回文子串-4](https://pic.leetcode-cn.com/1b9bfe346a4a9a5718b08149be11236a6db61b3922265d34f22632d4687aa0a8-image.png)
+
+由于存在奇数的字符串和偶数的字符串，所以我们需要从一个字符开始扩展，或者从两个字符之间开始扩展，所以总共有 n+n-1 个中心。
+
+```python
+class Solution:
+    def expandAroundCenter(self, s: str, left: int, right:int) -> str:
+        L = left; R = right
+        while L >= 0 and R < len(s) and s[L] == s[R]:
+            L -= 1
+            R += 1
+        return R - L - 1
+
+    def longestPalindrome(self, s: str) -> str:
+        if s == None or len(s) < 1:
+            return ""
+        start = 0; end = 0
+        for i in range(len(s)):
+            len1 = self.expandAroundCenter(s, i, i)
+            len2 = self.expandAroundCenter(s, i, i + 1)
+            len_ = max(len1, len2)
+            if len_ > end - start:
+                start = i - (len_ - 1) // 2
+                end = i + len_ // 2
+        return s[start:end + 1]
+```
+
+## 32-最长有效括号
+给定一个只包含 '(' 和 ')' 的字符串，找出最长的包含有效括号的子串的长度。
+
+示例 1:
+```
+输入: "(()"
+输出: 2
+解释: 最长有效括号子串为 "()"
+```
+
+示例 2:
+```
+输入: ")()())"
+输出: 4
+解释: 最长有效括号子串为 "()()"
+```
+
+```python
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        maxans = 0
+        length = len(s)
+        dp = [0 for _ in range(length)]  # 存放最长有效字符串的长度
+        for i in range(1, length):
+            if s[i] == ')':
+                # ...()
+                if s[i-1] == '(':
+                    if i >= 2:
+                        dp[i] = dp[i-2] + 2  # 前一个有效字符串长度 + 2
+                    else:
+                        dp[i] = 2
+                # ...))
+                elif i - dp[i-1] > 0 and s[i-dp[i-1]-1] == '(':
+                    if i - dp[i-1] >= 2:
+                        dp[i] = dp[i-1] + dp[i-dp[i-1]-2] + 2
+                    else:
+                        # (()())
+                        dp[i] = dp[i-1] + 2
+            maxans = max(maxans, dp[i])
+        return maxans
+```
+
+## 62-不同路径
+
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+
+问总共有多少条不同的路径？
+
+### 解法1：排列组合
+因为机器到底右下角，向下几步，向右几步都是固定的，
+
+比如，m=3, n=2，我们只要向下 1 步，向右 2 步就一定能到达终点。
+
+所以有 $C^{m-1}_{m+n-2}$
+​
+
+```python
+import math
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        ans = math.factorial(n+m-2)/(math.factorial(n-1)*math.factorial(m-1))
+        return int(ans)
+```
+### 解法2：动态规划
+我们令 `dp[i][j]` 是到达 `i`, `j` 最多路径
+
+动态方程：`dp[i][j] = dp[i-1][j] + dp[i][j-1]`
+
+注意，对于第一行 `dp[0][j]`，或者第一列 `dp[i][0]`，由于都是在边界，所以只能为 1
+
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [[1]*n] + [[1]+[0] * (n-1) for _ in range(m-1)]
+        #print(dp)
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[-1][-1]
+```
+
+## 63-不同路径II
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+
+现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
 
 
 
-   * 面试题：[通配符匹配|greedy|](#通配符匹配)
-   * 面试题：[跳跃游戏II|greedy|](#跳跃游戏II)
-   * 面试题：[加油站](#加油站|greedy|)
-   * 面试题：[135-分发糖果|greedy|](#135-分发糖果)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+网格中的障碍物和空位置分别用 1 和 0 来表示。
+
+说明：m 和 n 的值均不超过 100。
+
+示例 1:
+```
+输入:
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+输出: 2
+解释:
+3x3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -> 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右 -> 向右
+```
+
+```python
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        R = len(obstacleGrid)
+        C = len(obstacleGrid[0])
+
+        if obstacleGrid[0][0] == 1:
+            return 0
+
+        obstacleGrid[0][0] = 1
+        for i in range(1, R):
+            if obstacleGrid[i][0] == 0 and obstacleGrid[i-1][0] == 1:
+                obstacleGrid[i][0] = 1
+            else:
+                obstacleGrid[i][0] = 0
+
+        for i in range(1, C):
+            if obstacleGrid[0][i] == 0 and obstacleGrid[0][i-1] == 1:
+                obstacleGrid[0][i] = 1
+            else:
+                obstacleGrid[0][i] = 0
+
+        for i in range(1, R):
+            for j in range(1, C):
+                if obstacleGrid[i][j] == 0:
+                    obstacleGrid[i][j] = obstacleGrid[i-1][j] + obstacleGrid[i][j-1]
+                else:
+                    # 如果当前格子被置为1，则把累积的该位置置0
+                    obstacleGrid[i][j] = 0
+
+        return obstacleGrid[R-1][C-1]
+```
+
+## 64-最小路径和
+
+给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+说明：每次只能向下或者向右移动一步。
+
+示例:
+```
+输入:
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+输出: 7
+解释: 因为路径 1→3→1→1→1 的总和最小。
+```
+
+```python
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        R = len(grid)
+        C = len(grid[0])
+
+        for i in range(R-2, -1, -1):
+            grid[i][C-1] += grid[i+1][C-1]
+
+        for j in range(C-2, -1, -1):
+            grid[R-1][j] += grid[R-1][j+1]
+
+        for i in range(R-2, -1, -1):
+            for j in range(C-2, -1, -1):
+                if grid[i+1][j] > grid[i][j+1]:
+                    grid[i][j] += grid[i][j+1]
+                else:
+                    grid[i][j] += grid[i+1][j]
+        return grid[0][0]
+```
+
+## 72-编辑距离
+
+给定两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。
+
+你可以对一个单词进行如下三种操作：
+
+插入一个字符
+删除一个字符
+替换一个字符
+示例 1:
+```
+输入: word1 = "horse", word2 = "ros"
+输出: 3
+解释:
+horse -> rorse (将 'h' 替换为 'r')
+rorse -> rose (删除 'r')
+rose -> ros (删除 'e')
+```
+
+示例 2:
+```
+输入: word1 = "intention", word2 = "execution"
+输出: 5
+解释:
+intention -> inention (删除 't')
+inention -> enention (将 'i' 替换为 'e')
+enention -> exention (将 'n' 替换为 'x')
+exention -> exection (将 'n' 替换为 'c')
+exection -> execution (插入 'u')
+```
+
+### 解析：
+
+如果两个子串的最后一个字母相同，word1[i] = word2[i] 的情况下：
+$$
+D[i][j]=1+min(D[i−1][j],D[i][j−1],D[i−1][j−1]−1)
+D[i][j]=1+min(D[i−1][j],D[i][j−1],D[i−1][j−1]−1)
+$$
+否则，word1[i] != word2[i] 我们将考虑替换最后一个字符使得他们相同：
+$$
+D[i][j]=1+min(D[i−1][j],D[i][j−1],D[i−1][j−1])
+D[i][j]=1+min(D[i−1][j],D[i][j−1],D[i−1][j−1])
+$$
+
+```python
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        m = len(word1)
+        n = len(word2)
+        if m == 0 or n == 0:
+            return m + n
+
+        d = [[0]*(m+1) for _ in range(n+1)]
+        for i in range(n+1):
+            d[i][0] = i
+        for j in range(m+1):
+            d[0][j] = j
+        for i in range(1, n+1):
+            for j in range(1, m+1):
+                if word2[i-1] == word1[j-1]:
+                    d[i][j] = 1 + min(d[i-1][j-1]-1, d[i-1][j], d[i][j-1])
+                else:
+                    d[i][j] = 1 + min(d[i-1][j-1], d[i-1][j], d[i][j-1])
+        return d[n][m]
+```
+
+## 84-柱状图中最大的矩形
+
+给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+
+求在该柱状图中，能够勾勒出来的矩形的最大面积。
+
+
+![84-柱状图中最大的矩形-1](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/12/histogram.png)
+
+
+以上是柱状图的示例，其中每个柱子的宽度为 1，给定的高度为 [2,1,5,6,2,3]。
+
+
+![84-柱状图中最大的矩形-2](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/12/histogram_area.png)
+
+
+图中阴影部分为所能勾勒出的最大矩形面积，其面积为 10 个单位。
+
+
+
+示例:
+```
+输入: [2,1,5,6,2,3]
+输出: 10
+```
+
+
+```python
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        stack = [-1]
+        maxarea = 0
+        for i in range(len(heights)):
+            while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
+                last_one = stack.pop()
+                maxarea = max(maxarea, heights[last_one] * (i - stack[-1] - 1))
+            stack.append(i)
+        while stack[-1] != -1:
+            last_one = stack.pop()
+            maxarea = max(maxarea, heights[last_one] * (len(heights) - stack[-1] - 1))
+        return maxarea
+```
+
+## 85-最大矩形
+
+给定一个仅包含 0 和 1 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
+
+示例:
+```
+输入:
+[
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+]
+输出: 6
+```
+
+```python
+class Solution:
+
+    # Get the maximum area in a histogram given its heights
+    def leetcode84(self, heights):
+        stack = [-1]
+
+        maxarea = 0
+        for i in range(len(heights)):
+
+            while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
+                maxarea = max(maxarea, heights[stack.pop()] * (i - stack[-1] - 1))
+            stack.append(i)
+
+        while stack[-1] != -1:
+            maxarea = max(maxarea, heights[stack.pop()] * (len(heights) - stack[-1] - 1))
+        return maxarea
+
+
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+
+        if not matrix: return 0
+
+        maxarea = 0
+        dp = [0] * len(matrix[0])
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+
+                # update the state of this row's histogram using the last row's histogram
+                # by keeping track of the number of consecutive ones
+
+                dp[j] = dp[j] + 1 if matrix[i][j] == '1' else 0
+
+            # update maxarea with the maximum area from this row's histogram
+            maxarea = max(maxarea, self.leetcode84(dp))
+        return maxarea
+```
 
 ## 通配符匹配
 
@@ -211,4 +614,44 @@ class Solution:
             if_in_stack[ord(s[i]) - ord('a')] = True
 
         return ''.join(stack)
+```
+
+## 生产口罩
+
+[题目](https://www.nowcoder.com/questionTerminal/f0ebe2aa29da4a4a9d0ea71357cf2f91)
+
+[题解](https://blog.nowcoder.net/n/b64a95632bc94939b83f5a1999eb81d0)
+
+考虑动态规划，dp[i][j]dp[i][j]代表选了1−i的工厂后，用j个人所能生产的最多的口罩个数。那么dpdp转移方程式就很简单了,假设我们现在枚举到了第i个人的第hh种策略，其中$a_{ih}$ 代表人数，$b_{ih}$ 代表生产的口罩数。dp[i][j+$a_{ih}$]=max(dp[i][j+$a_{ih}$], dp[i−1][j]+$y_{ih}$)，需要注意的是第i个生产线也可以选择不选任何策略。
+
+```python
+class Point:
+    def __init__(self, a=0, b=0):
+        self.x = a
+        self.y = b
+
+class Solution:
+    def producemask(self , n , m , strategy):
+        """
+        n: 生产线数量
+        m: 人数
+        strategy: 生产线情况
+        """
+        dp = [[0]*(m+1) for _ in range(n+1)]  # dp[i][j]代表选了i-1的生产线后，用j个人所能生产的最多的口罩个数
+        for i in range(1, n+1):  # 第i个生产线
+            for j in range(m+1):  # 第j个员工
+                for x in strategy[i-1]:  # 从strategy选取策略为x
+                    print("生产线: {}, 员工: {}, 策略 人数-口罩数: {}-{}".format(i, j, x.x, x.y))
+                    if x.x + j > m:
+                        continue
+                    dp[i][j+x.x] = max(dp[i][j+x.x], dp[i-1][j]+x.y)
+            for j in range(m+1):
+                dp[i][j] = max(dp[i][j], dp[i-1][j])
+        return dp[n][m]
+
+print(Solution().producemask(3,
+                             5,
+                             [[Point(1,3),Point(2,4)],
+                             [Point(3,4),Point(4,4)],
+                             [Point(8,8)]]))
 ```
