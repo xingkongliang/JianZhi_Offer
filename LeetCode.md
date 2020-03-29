@@ -16,8 +16,12 @@
    * 面试题：[加油站](#加油站)
    * 面试题：[135-分发糖果](#135-分发糖果)
 
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题：[202-快乐数](#202-快乐数)
+   * 面试题：[203-移除链表元素](#203-移除链表元素)
+   * 面试题：[204-计数质数](#204-计数质数)
+   * 面试题：[205-同构字符串](#205-同构字符串)
+   * 面试题：[206-反转链表](#206-反转链表)
+   * 面试题：[219-存在重复元素 II](#219-存在重复元素 II)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
 
@@ -654,4 +658,124 @@ print(Solution().producemask(3,
                              [[Point(1,3),Point(2,4)],
                              [Point(3,4),Point(4,4)],
                              [Point(8,8)]]))
+```
+
+## 202-快乐数
+
+编写一个算法来判断一个数是不是“快乐数”。
+
+一个“快乐数”定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是无限循环但始终变不到 1。如果可以变为 1，那么这个数就是快乐数。
+
+```python
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        issam = [n]
+        while n != 1:
+            a = list(str(n))
+            n = 0
+            for i in a:
+                n += pow(int(i),2)
+            issam.append(n)
+            if len(issam) != len(set(issam)):
+                return False
+        return True
+
+作者：i-want-to-see-you
+链接：https://leetcode-cn.com/problems/happy-number/solution/pythonli-yong-setzhong-zhi-xun-huan-by-i-want-to-s/
+来源：力扣（LeetCode）
+```
+
+## 203-移除链表元素
+删除链表中等于给定值 val 的所有节点。
+
+```python
+class Solution:
+    def removeElements(self, head: ListNode, val: int) -> ListNode:
+        dump = ListNode(-1)
+        dump.next = head
+        prev, curr = dump, head
+
+        while curr:
+            if curr.val == val:
+                prev.next = curr.next
+            else:
+                prev = curr
+            curr = curr.next
+        return dump.next
+```
+
+## 204-计数质数
+统计所有小于非负整数 n 的质数的数量。
+
+```python
+class Solution:
+    def countPrimes(self, n: int) -> int:
+        isPrim = [ True for _ in range(n)]
+        for i in range(2, n):
+            if isPrim[i]:
+                for j in range(2*i, n, i):
+                    isPrim[j] = False
+        count = 0
+        for i in range(2, n):
+            if isPrim[i]:
+                count += 1
+        return count
+```
+
+## 205-同构字符串
+给定两个字符串 s 和 t，判断它们是否是同构的。
+
+如果 s 中的字符可以被替换得到 t ，那么这两个字符串是同构的。
+
+所有出现的字符都必须用另一个字符替换，同时保留字符的顺序。两个字符不能映射到同一个字符上，但字符可以映射自己本身。
+
+```python
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        return self.isIsomorphicHelper(s, t) and self.isIsomorphicHelper(t, s)
+    def isIsomorphicHelper(self, s: str, t: str) -> bool:
+        s = list(s); t = list(t)
+        map = {}
+        for i in range(len(s)):
+            if s[i] not in map.keys():
+                map[s[i]] = t[i]
+            if map[s[i]] != t[i]:
+                return False
+        return True
+```
+
+## 206-反转链表
+反转一个单链表。
+
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head
+        while curr != None:
+            nextTemp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nextTemp
+        return prev
+```
+
+## 219-存在重复元素 II
+给定一个整数数组和一个整数 k，判断数组中是否存在两个不同的索引 i 和 j，使得 `nums[i] = nums[j]`，并且 i 和 j 的差的 绝对值 至多为 k。
+
+```python
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        stack = {}
+        for i in range(len(nums)):
+            if nums[i] not in stack.keys():
+                stack[nums[i]] = i
+            else:
+                if i - stack[nums[i]] <= k:
+                    return True
+                else:
+                    stack[nums[i]] = i
+        return False
 ```

@@ -19,6 +19,8 @@
 
 - [LeetCode题解](./LeetCodeLeetCode.md)
 
+- [华为机试训练题](./华为机试训练题.md)
+
 ## 刷题
 
 - [牛客网-在线编程专题](https://www.nowcoder.com/activity/oj)
