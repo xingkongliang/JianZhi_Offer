@@ -22,6 +22,18 @@
    * 面试题：[205-同构字符串](#205-同构字符串)
    * 面试题：[206-反转链表](#206-反转链表)
    * 面试题：[219-存在重复元素II](#219-存在重复元素II)
+   * 面试题：[231-2的幂](#231-2的幂)
+   * 面试题：[234-回文链表](#234-回文链表)
+   * 面试题：[235-二叉搜索树的最近公共祖先](#235-二叉搜索树的最近公共祖先)
+   * 面试题：[242-有效的字母异位词](#242-有效的字母异位词)
+   * 面试题：[257-二叉树的所有路径](#257-二叉树的所有路径)
+   * 面试题：[258-各位相加](#258-各位相加)
+   * 面试题：[268-缺失数字](#268-缺失数字)
+   * 面试题：[283-移动零](#283-移动零)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
 
@@ -681,8 +693,6 @@ class Solution:
         return True
 
 作者：i-want-to-see-you
-链接：https://leetcode-cn.com/problems/happy-number/solution/pythonli-yong-setzhong-zhi-xun-huan-by-i-want-to-s/
-来源：力扣（LeetCode）
 ```
 
 ## 203-移除链表元素
@@ -778,4 +788,225 @@ class Solution:
                 else:
                     stack[nums[i]] = i
         return False
+```
+
+## 231-2的幂
+给定一个整数，编写一个函数来判断它是否是 2 的幂次方。
+
+```python
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        if n == 0:
+            return False
+        return n & (n-1) == 0
+```
+
+## 234-回文链表
+请判断一个链表是否为回文链表。
+
+```python
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        if head is None:
+            return True
+
+        # Find the end of first half and reverse second half.
+        first_half_end = self.end_of_first_half(head)
+        second_half_start = self.reverse_list(first_half_end.next)
+
+        # Check whether or not there's a palindrome.
+        result = True
+        first_position = head
+        second_position = second_half_start
+        while result and second_position is not None:
+            if first_position.val != second_position.val:
+                result = False
+            first_position = first_position.next
+            second_position = second_position.next
+
+        # Restore the list and return the result.
+        first_half_end.next = self.reverse_list(second_half_start)
+        return result    
+
+    def end_of_first_half(self, head):
+        fast = head
+        slow = head
+        while fast.next is not None and fast.next.next is not None:
+            fast = fast.next.next
+            slow = slow.next
+        return slow
+
+    def reverse_list(self, head):
+        previous = None
+        current = head
+        while current is not None:
+            next_node = current.next
+            current.next = previous
+            previous = current
+            current = next_node
+        return previous
+
+作者：LeetCode
+链接：https://leetcode-cn.com/problems/palindrome-linked-list/solution/hui-wen-lian-biao-by-leetcode/
+来源：力扣（LeetCode）
+```
+
+## 235-二叉搜索树的最近公共祖先
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+```python
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        elif p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        else:
+            return root
+```
+
+## 242-有效的字母异位词
+
+给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的字母异位词。
+
+```python
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        table = {}
+        for i in range(len(s)):
+            if s[i] not in table.keys():
+                table[s[i]] = 1
+            else:
+                table[s[i]] += 1
+
+        for i in range(len(t)):
+            if t[i] not in table.keys():
+                return False
+            else:
+                table[t[i]] -= 1
+                if table[t[i]] < 0:
+                    return False
+        return True
+```
+
+## 257-二叉树的所有路径
+
+给定一个二叉树，返回所有从根节点到叶子节点的路径。
+说明: 叶子节点是指没有子节点的节点。
+
+示例:
+```
+输入:
+
+   1
+ /   \
+2     3
+ \
+  5
+
+输出: ["1->2->5", "1->3"]
+
+解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
+```
+
+迭代：
+```python
+class Solution:
+    def binaryTreePaths(self, root):
+        def construct_paths(root, path):
+            if root:
+                path += str(root.val)
+                if not root.left and not root.right:  # 当前节点是叶子节点
+                    paths.append(path)  # 把路径加入到答案中
+                else:
+                    path += '->'  # 当前节点不是叶子节点，继续递归遍历
+                    construct_paths(root.left, path)
+                    construct_paths(root.right, path)
+
+        paths = []
+        construct_paths(root, '')
+        return paths
+
+作者：LeetCode
+链接：https://leetcode-cn.com/problems/binary-tree-paths/solution/er-cha-shu-de-suo-you-lu-jing-by-leetcode/
+```
+
+递归：
+```python
+class Solution:
+    def binaryTreePaths(self, root):
+        if not root:
+            return []
+
+        paths = []
+        stack = [(root, str(root.val))]
+        while stack:
+            node, path = stack.pop()
+            if not node.left and not node.right:
+                paths.append(path)
+            if node.left:
+                stack.append((node.left, path + '->' + str(node.left.val)))
+            if node.right:
+                stack.append((node.right, path + '->' + str(node.right.val)))
+
+        return paths
+
+作者：LeetCode
+链接：https://leetcode-cn.com/problems/binary-tree-paths/solution/er-cha-shu-de-suo-you-lu-jing-by-leetcode/
+```
+
+## 258-各位相加
+给定一个非负整数 num，反复将各个位上的数字相加，直到结果为一位数。
+
+示例:
+```
+输入: 38
+输出: 2
+解释: 各位相加的过程为：3 + 8 = 11, 1 + 1 = 2。 由于 2 是一位数，所以返回 2。
+```
+
+```python
+class Solution:
+    def addDigits(self, num: int) -> int:
+        return num % 9 or 9 * bool(num)
+```
+
+## 268-缺失数字
+给定一个包含 0, 1, 2, ..., n 中 n 个数的序列，找出 0 .. n 中没有出现在序列中的那个数。
+
+```python
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        num_set = set(nums)
+        n = len(nums) + 1
+        for number in range(n):
+            if number not in num_set:
+                return number
+```
+## 283-移动零
+
+给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+示例:
+```
+输入: [0,1,0,3,12]
+输出: [1,3,12,0,0]
+```
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        j = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[j] = nums[i]
+                j += 1
+        for i in range(j, len(nums)):
+            nums[i] = 0
+        return nums
 ```
