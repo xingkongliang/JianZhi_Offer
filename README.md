@@ -17,7 +17,7 @@
 
 - [剑指offer题解](./JianZhi_Offer.md)
 
-- [LeetCode题解](./LeetCodeLeetCode.md)
+- [LeetCode题解](./LeetCode.md)
 
 - [华为机试训练题](./华为机试训练题.md)
 

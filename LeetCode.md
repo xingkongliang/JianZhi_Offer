@@ -1,6 +1,16 @@
 # LeetCode
 
+
+   * 面试题：[3-无重复字符的最长子串](#3-无重复字符的最长子串)
    * 面试题：[5-最长回文子串](#5-最长回文子串)
+   * 面试题：[11-盛最多水的容器](#11-盛最多水的容器)
+   * 面试题：[15-三数之和](#15-三数之和)
+   * 面试题：[16-最接近的三数之和](#16-最接近的三数之和)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+   * 面试题：[TEMP](#TEMP)
+
+
    * 面试题：[32-最长有效括号](#32-最长有效括号)
    * 面试题：[62-不同路径](#62-不同路径)
    * 面试题：[63-不同路径II](#63-不同路径II)
@@ -37,6 +47,25 @@
    * 面试题：[TEMP](#TEMP)
    * 面试题：[TEMP](#TEMP)
 
+## 3-无重复字符的最长子串
+给定一个字符串，请你找出其中不含有重复字符的 `最长子串` 的长度。
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        n = len(s)
+        t_set = set()
+        ans = 0; i = 0; j = 0
+        while j < n and i < n:
+            if s[j] not in t_set:
+                t_set.add(s[j])
+                j += 1
+                ans = max(ans, j - i)
+            else:
+                t_set.remove(s[i])
+                i += 1
+        return ans
+```
 
 ## 5-最长回文子串
 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
@@ -81,6 +110,79 @@ class Solution:
                 start = i - (len_ - 1) // 2
                 end = i + len_ // 2
         return s[start:end + 1]
+```
+## 11-盛最多水的容器
+
+给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+说明：你不能倾斜容器，且 n 的值至少为 2。
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        ans = 0
+        left = 0; right = len(height) - 1
+        while left < right:
+            ans = max(ans, (right-left)*min(height[left], height[right]))
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -= 1
+        return ans
+```
+
+## 15-三数之和
+
+给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+        for i in range(len(nums)-2):
+            if i > 0 and nums[i] == nums[i-1]: continue
+            left = i + 1
+            right = len(nums) - 1
+            while left < right:
+                if nums[i] + nums[left] + nums[right] == 0:
+                    res.append([nums[i], nums[left], nums[right]])
+                    right -= 1
+                    left += 1
+                    while left<right and nums[right]==nums[right+1]: right -= 1
+                    while left<right and nums[left]==nums[left-1]: left += 1
+                elif nums[i] + nums[left] + nums[right] > 0:
+                    right -= 1
+                    while left<right and nums[right]==nums[right+1]: right -= 1
+                else:
+                    left += 1
+                    while left<right and nums[left]==nums[left-1]: left += 1
+        return res
+```
+
+## 16-最接近的三数之和
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+```python
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        ans = nums[0] + nums[1] + nums[2]
+        for i in range(len(nums)):
+            start = i + 1
+            end = len(nums) - 1
+            while start < end:
+                s = nums[i] + nums[start] + nums[end]
+                if abs(target - s) < abs(target - ans):
+                    ans = s
+                if s > target:
+                    end -= 1
+                elif s < target:
+                    start += 1
+                else:
+                    return ans
+        return ans
 ```
 
 ## 32-最长有效括号
