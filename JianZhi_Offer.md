@@ -1,7 +1,7 @@
 # 剑指Offer
 
 * **剑指Offer题解**
-   * 面试题3：[二维数组中的查找](#3-数组中重复的数字)
+   * 面试题3：[二维数组中的查找](#3-二维数组中的查找)
    * 面试题4：[替换空格](#4-替换空格)
    * 面试题5：[从尾到头打印链表](#5-从尾到头打印链表)
    * 面试题6：[重建二叉树](#6-重建二叉树)
@@ -19,7 +19,7 @@
    * 面试题15：[链表中倒数第k个结点](#15-链表中倒数第k个结点)
    * 面试题16：[反转链表](#16-反转链表)
    * 面试题17：[合并两个排序的链表](#17-合并两个排序的链表)
-   * 面试题18：[数的子结构](#18-数的子结构)
+   * 面试题18：[树的子结构](#18-树的子结构)
    * 面试题19：[二叉树的镜像](#19-二叉树的镜像)
    * 面试题20：[顺时针打印矩阵](#20-顺时针打印矩阵)
    * 面试题21：[包含min函数的栈](#21-包含min函数的栈)
@@ -415,24 +415,6 @@ class Solution:
         return p2
 ```
 
-如果题目中不要求保持相对位置不变，则可使用如下代码：
-```python
-class Solution:
-    def reOrderArray(self, array):
-        pBegin = 0
-        pEnd = len(array) - 1
-        while pBegin < pEnd:
-            while pBegin < pEnd and array[pBegin] % 2 != 0:
-                pBegin += 1
-            while pBegin < pEnd and array[pEnd] % 2 != 1:
-                pEnd -= 1
-            if pBegin < pEnd:
-                temp = array[pBegin]
-                array[pBegin] = array[pEnd]
-                array[pEnd] = temp
-        return array
-```
-
 ## 16-反转链表
 题目描述：
 输入一个链表，反转链表后，输出新链表的表头。
@@ -460,26 +442,22 @@ class Solution:
 题目描述
 输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
 
+
 递归版
 ```python
-链接：https://www.nowcoder.com/questionTerminal/d8b6b4358f774294a89de2a6ac4d9337?f=discussion
-来源：牛客网
-
-public ListNode Merge(ListNode list1,ListNode list2) {
-       if(list1 == null){
-           return list2;
-       }
-       if(list2 == null){
-           return list1;
-       }
-       if(list1.val <= list2.val){
-           list1.next = Merge(list1.next, list2);
-           return list1;
-       }else{
-           list2.next = Merge(list1, list2.next);
-           return list2;
-       }       
-   }
+class Solution:
+    # 返回合并后列表
+    def Merge(self, pHead1, pHead2):
+        if not pHead1:
+            return pHead2
+        if not pHead2:
+            return pHead1
+        if pHead1.val >= pHead2.val:
+            pHead2.next = self.Merge(pHead2.next, pHead1)
+            return pHead2
+        if pHead1.val <= pHead2.val:
+            pHead1.next = self.Merge(pHead1.next, pHead2)
+            return pHead1
 ```
 
 非递归版
@@ -523,7 +501,7 @@ if(list1 == null){
 
 ```
 
-## 18-数的子结构
+## 18-树的子结构
 
 题目描述
 输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
@@ -577,6 +555,7 @@ class Solution:
 操作给定的二叉树，将其变换为源二叉树的镜像。
 输入描述:
 二叉树的镜像定义：源二叉树
+```
     	    8
     	   /  \
     	  6   10
@@ -588,6 +567,7 @@ class Solution:
     	  10   6
     	 / \  / \
     	11 9 7  5
+```
 
 ```python
 class Solution:
