@@ -6,8 +6,8 @@
    * 面试题：[11-盛最多水的容器](#11-盛最多水的容器)
    * 面试题：[15-三数之和](#15-三数之和)
    * 面试题：[16-最接近的三数之和](#16-最接近的三数之和)
-   * 面试题：[TEMP](#TEMP)
-   * 面试题：[TEMP](#TEMP)
+   * 面试题：[22-括号生成](#22-括号生成)
+   * 面试题：[29-两数相除](#29-两数相除)
    * 面试题：[TEMP](#TEMP)
 
 
@@ -184,7 +184,69 @@ class Solution:
                     return ans
         return ans
 ```
+## 22-括号生成
+给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且`有效的`括号组合。
 
+例如，给出 n = 3，生成结果为：
+```
+[
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+]
+```
+
+```python
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        ans = []
+        def backtrack(S = '', left = 0, right = 0):
+            if len(S) == 2 * n:
+                ans.append(S)
+                return
+            if left < n:
+                backtrack(S+'(', left+1, right)
+            if right < left:
+                backtrack(S+')', left, right+1)
+
+        backtrack()
+        return ans
+```
+
+## 29-两数相除
+给定两个整数，被除数 dividend 和除数 divisor。将两数相除，要求不使用乘法、除法和 mod 运算符。
+
+返回被除数 dividend 除以除数 divisor 得到的商。
+
+整数除法的结果应当截去（truncate）其小数部分，例如：truncate(8.345) = 8 以及 truncate(-2.7335) = -2
+
+```Python
+def divide(self, dividend: int, divisor: int) -> int:
+    sign = (dividend > 0) ^ (divisor > 0)
+    dividend = abs(dividend)
+    divisor = abs(divisor)
+    count = 0
+    #把除数不断左移，直到它大于被除数
+    while dividend >= divisor:
+        count += 1
+        divisor <<= 1
+    result = 0
+    while count > 0:
+        count -= 1
+        divisor >>= 1
+        if divisor <= dividend:
+            result += 1 << count #这里的移位运算是把二进制（第count+1位上的1）转换为十进制
+            dividend -= divisor
+    if sign: result = -result
+    return result if -(1<<31) <= result <= (1<<31)-1 else (1<<31)-1
+
+作者：ysy4869
+链接：https://leetcode-cn.com/problems/divide-two-integers/solution/xiao-xue-sheng-du-hui-de-lie-shu-shi-suan-chu-fa-b/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ## 32-最长有效括号
 给定一个只包含 '(' 和 ')' 的字符串，找出最长的包含有效括号的子串的长度。
 
