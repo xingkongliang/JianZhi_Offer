@@ -8,10 +8,12 @@
    * 面试题：[16-最接近的三数之和](#16-最接近的三数之和)
    * 面试题：[22-括号生成](#22-括号生成)
    * 面试题：[29-两数相除](#29-两数相除)
-   * 面试题：[TEMP](#TEMP)
-
-
+   * 面试题：[31-下一个排列](#31-下一个排列)
    * 面试题：[32-最长有效括号](#32-最长有效括号)
+   * 面试题：[33-搜索旋转排序数组](#33-搜索旋转排序数组)
+   * 面试题：[34-在排序数组中查找元素的第一个和最后一个位置](#34-在排序数组中查找元素的第一个和最后一个位置)
+   * 面试题：[39-组合总和](#39-组合总和)
+
    * 面试题：[62-不同路径](#62-不同路径)
    * 面试题：[63-不同路径II](#63-不同路径II)
    * 面试题：[64-最小路径和](#64-最小路径和)
@@ -247,6 +249,66 @@ def divide(self, dividend: int, divisor: int) -> int:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+
+## 31-下一个排列
+实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+
+如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+
+必须原地修改，只允许使用额外常数空间。
+
+以下是一些例子，输入位于左侧列，其相应输出位于右侧列。
+```
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+```
+
+```python
+class Solution:
+    def reverse(self, nums, ind):  
+        """
+        把nums[ind:]进行翻转
+        """
+        a, b = ind, len(nums)-1
+        while a<b:
+            nums[a], nums[b] = nums[b], nums[a]
+            a += 1
+            b -= 1
+
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        if not nums:
+            return None
+        n = len(nums)
+        if n<2:
+            return nums
+
+        for i in range(n-1, 0, -1):
+            if nums[i-1]<nums[i]:
+                if i==n-1:  
+                    # 如果刚好是最后两位则将其换位后输出
+                    nums[i-1], nums[i] = nums[i], nums[i-1]
+                    return nums
+                else:
+                    if nums[i-1]<nums[n-1]:
+                        # 如果nums[i-1]小于nums[i:]中最小值，则将原最小值换过来，再翻转
+                        nums[i-1], nums[n-1] = nums[n-1], nums[i-1]
+                        self.reverse(nums, i) # i begin
+                        return nums
+                    else:
+                        for j in range(i, n):
+                            # 如果nums[i-1]后面有更小的，则交换再翻转
+                            if nums[i-1]>=nums[j]:
+                                nums[i-1], nums[j-1] = nums[j-1], nums[i-1]
+                                self.reverse(nums, i)
+                                return nums
+        self.reverse(nums, 0)  # 如果是最大的，则翻转成最小的               
+        return nums
+```
+
 ## 32-最长有效括号
 给定一个只包含 '(' 和 ')' 的字符串，找出最长的包含有效括号的子串的长度。
 
@@ -287,6 +349,202 @@ class Solution:
                         dp[i] = dp[i-1] + 2
             maxans = max(maxans, dp[i])
         return maxans
+```
+
+## 33-搜索旋转排序数组
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+
+你可以假设数组中不存在重复的元素。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+```python
+class Solution:
+    def find_index(self, nums, left, right):
+        if nums[left] < nums[right]:
+            return 0
+        while left <= right:
+            mid = (left + right) // 2
+            if nums[mid] > nums[mid+1]:
+                return mid + 1
+            else:
+                if nums[mid] < nums[left]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+
+    def b_serch(self, nums, left, right, target):
+        while left <= right:
+            mid = (left + right) // 2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] < target:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return -1
+
+    def search(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        if n == 0:
+            return -1
+        if n == 1:
+            return 0 if nums[0] == target else -1
+
+        rotate_index = self.find_index(nums, 0, n - 1)
+        # if target is the smallest element
+        if nums[rotate_index] == target:
+            return rotate_index
+        # if array is not rotated, search in the entire array
+        if rotate_index == 0:
+            return self.b_serch(nums, 0, n - 1, target)
+        if target < nums[0]:
+            # search on the right side
+            return self.b_serch(nums, rotate_index, n - 1, target)
+        # search on the left side
+        return self.b_serch(nums, 0, rotate_index, target)
+```
+
+## 34-在排序数组中查找元素的第一个和最后一个位置
+给定一个按照升序排列的整数数组 `nums`，和一个目标值 `target`。找出给定目标值在数组中的开始位置和结束位置。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+如果数组中不存在目标值，返回 `[-1, -1]`。
+
+示例 1:
+```
+输入: nums = [5,7,7,8,8,10], target = 8
+输出: [3,4]
+```
+
+```python
+class Solution:
+    def extreme_insertion_index(self, nums, target, left):
+        lo = 0
+        hi = len(nums)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if nums[mid] > target or (left and target == nums[mid]):
+                hi = mid
+            else:
+                lo = mid+1
+        return lo
+
+    def searchRange(self, nums, target):
+        left_idx = self.extreme_insertion_index(nums, target, True)
+
+        if left_idx == len(nums) or nums[left_idx] != target:
+            return [-1, -1]
+
+        return [left_idx, self.extreme_insertion_index(nums, target, False)-1]
+```
+
+## 39-组合总和
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的数字可以无限制重复被选取。
+
+说明：
+
+所有数字（包括 target）都是正整数。
+解集不能包含重复的组合。
+示例 1:
+```
+输入: candidates = [2,3,6,7], target = 7,
+所求解集为:
+[
+  [7],
+  [2,2,3]
+]
+```
+
+```python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        size = len(candidates)
+        if size == 0:
+            return []
+
+        candidates.sort()
+        path = []
+        res = []
+        self.__dfs(candidates, 0, size, path, res, target)
+        return res
+
+    def __dfs(self, candidates, begin, size, path, res, target):
+        # 先写递归终止的情况
+        if target == 0:
+            res.append(path[:])
+            return
+
+        for index in range(begin, size):
+            residue = target - candidates[index]
+            # “剪枝”操作，不必递归到下一层，并且后面的分支也不必执行
+            if residue < 0:
+                break
+            path.append(candidates[index])
+            # 因为下一层不能比上一层还小，起始索引还从 index 开始
+            self.__dfs(candidates, index, size, path, res, residue)
+            path.pop()
+```
+## 40-组合总和II
+给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的每个数字在每个组合中只能使用一次。
+
+说明：
+
+所有数字（包括目标数）都是正整数。
+解集不能包含重复的组合。
+示例 1:
+```
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+所求解集为:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+```
+
+```python
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        size = len(candidates)
+        if size == 0:
+            return []
+
+        candidates.sort()
+        path = []
+        res = []
+        self.__dfs(candidates, 0, size, path, res, target)
+        return res
+
+    def __dfs(self, candidates, begin, size, path, res, target):
+        # 先写递归终止的情况
+        if target == 0:
+            res.append(path[:])
+            return
+
+        for index in range(begin, size):
+            residue = target - candidates[index]
+            # “剪枝”操作，不必递归到下一层，并且后面的分支也不必执行
+            if residue < 0:
+                break
+
+            if index > begin and candidates[index-1] == candidates[index]:
+                continue
+
+            path.append(candidates[index])
+            # 因为下一层不能比上一层还小，起始索引还从 index 开始
+            self.__dfs(candidates, index+1, size, path, res, residue)
+            path.pop()
 ```
 
 ## 62-不同路径
